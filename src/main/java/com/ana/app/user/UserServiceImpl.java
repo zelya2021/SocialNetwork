@@ -1,5 +1,6 @@
 package com.ana.app.user;
 
+import com.ana.app.login.exceptions.BadRequestException;
 import com.ana.app.user.DTOs.CreateUserDTO;
 import com.ana.app.user.DTOs.ResponseDTO;
 import com.ana.app.user.DTOs.ResponseStatusEnum;
@@ -49,6 +50,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public ResponseDTO createUser(CreateUserDTO userDTO) {
+        var existingUser = userRepository.findByEmail(userDTO.getEmail());
+        if(existingUser != null)
+            throw new BadRequestException("User already exist!");
         UserEntity userEntity = getUserEntity(userDTO);
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(userEntity);
