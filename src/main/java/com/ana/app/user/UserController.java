@@ -2,6 +2,7 @@ package com.ana.app.user;
 
 import com.ana.app.user.DTOs.CreateUserDTO;
 import com.ana.app.user.DTOs.ResponseDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,8 +32,9 @@ public class UserController {
 
 
     @PostMapping()
-    public ResponseDTO createUser(@RequestBody CreateUserDTO user)
+    public ResponseDTO createUser(@Valid @RequestBody CreateUserDTO user)
     {
+        System.out.println("User is created" + user);
         return userService.createUser(user);
     }
 
