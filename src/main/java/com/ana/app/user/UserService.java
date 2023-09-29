@@ -18,6 +18,8 @@ public interface UserService {
     // Update operation
     UserResponseDTO updateUser(UpdateUserDTO user, Long userId);
 
+    UserResponseDTO getMe();
+
     ResponseDTO createUser (CreateUserDTO user);
 
     // Delete operation

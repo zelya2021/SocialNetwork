@@ -6,6 +6,8 @@ import com.ana.app.user.Mappers.UserMapper;
 import io.jsonwebtoken.lang.Strings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,16 @@ public class UserServiceImpl implements UserService{
 
         userRepository.save(userEntity);
         return getUserResponseDTO(userEntity);
+    }
+
+    @Override
+    public UserResponseDTO getMe() {
+        UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var userEntity = userRepository.findByEmail(userDetails.getUsername());
+        return UserResponseDTO.builder()
+                .name(userEntity.getName())
+                .lastName((userEntity.getLastName()))
+                .email(userEntity.getEmail()).build();
     }
 
     @Override
