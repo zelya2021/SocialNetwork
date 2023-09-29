@@ -2,6 +2,8 @@ package com.ana.app.user;
 
 import com.ana.app.user.DTOs.CreateUserDTO;
 import com.ana.app.user.DTOs.ResponseDTO;
+import com.ana.app.user.DTOs.UpdateUserDTO;
+import com.ana.app.user.DTOs.UserResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,14 +41,14 @@ public class UserController {
 
     // Read operation
     @GetMapping()
-    public List<UserEntity> fetchDepartmentList()
+    public List<UserEntity> fetchUsersList()
     {
         return userService.fetchUserList();
     }
 
     // Update operation
     @PutMapping("/{id}")
-    public UserEntity updateUser(@RequestBody UserEntity user, @PathVariable("id") Long id)
+    public UserResponseDTO updateUser(@RequestBody UpdateUserDTO user, @PathVariable("id") Long id)
     {
         return userService.updateUser(user, id);
     }

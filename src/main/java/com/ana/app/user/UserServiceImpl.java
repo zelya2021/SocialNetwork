@@ -1,10 +1,9 @@
 package com.ana.app.user;
 
 import com.ana.app.login.exceptions.BadRequestException;
-import com.ana.app.user.DTOs.CreateUserDTO;
-import com.ana.app.user.DTOs.ResponseDTO;
-import com.ana.app.user.DTOs.ResponseStatusEnum;
+import com.ana.app.user.DTOs.*;
 import com.ana.app.user.Mappers.UserMapper;
+import io.jsonwebtoken.lang.Strings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -21,31 +21,30 @@ public class UserServiceImpl implements UserService{
     private BCryptPasswordEncoder passwordEncoder;
 
     private static final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
-//    @Override
-//    public UserEntity saveUser(UserEntity user) {
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        return userRepository.save(user);
-//    }
-
     @Override
     public List<UserEntity> fetchUserList() {
         return (List<UserEntity>) userRepository.findAll();
     }
 
     @Override
-    public UserEntity updateUser(UserEntity user, Long userId) {
-        UserEntity userEntity = userRepository.findById(userId).get();
+    public UserResponseDTO updateUser(UpdateUserDTO userDto, Long userId) {
+        Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
 
-        if(Objects.nonNull(user.getName()) && !"".equalsIgnoreCase(user.getName())){
-            userEntity.setName(userEntity.getName());
+        if (!userEntityOptional.isPresent()) {
+            throw new BadRequestException("User do not exist!");
         }
 
-        if(Objects.nonNull(user.getEmail()) && !"".equalsIgnoreCase(user.getEmail())){
-            userEntity.setEmail(userEntity.getEmail());
+        var userEntity = userEntityOptional.get();
+
+        if(Objects.nonNull(userDto.getLastName()) && Strings.hasLength(userDto.getLastName())){
+            userEntity.setLastName(userDto.getLastName());
         }
 
-        return userRepository.save(userEntity);
+        userEntity.setName(userDto.getName());
+        userEntity.setEmail(userDto.getEmail());
+
+        userRepository.save(userEntity);
+        return getUserResponseDTO(userEntity);
     }
 
     @Override
@@ -66,5 +65,8 @@ public class UserServiceImpl implements UserService{
 
     public UserEntity getUserEntity(CreateUserDTO user) {
         return userMapper.toEntity(user);
+    }
+    public UserResponseDTO getUserResponseDTO(UserEntity user) {
+        return userMapper.toUserResponseDTO(user);
     }
 }

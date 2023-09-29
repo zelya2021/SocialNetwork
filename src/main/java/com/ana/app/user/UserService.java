@@ -2,6 +2,8 @@ package com.ana.app.user;
 
 import com.ana.app.user.DTOs.CreateUserDTO;
 import com.ana.app.user.DTOs.ResponseDTO;
+import com.ana.app.user.DTOs.UpdateUserDTO;
+import com.ana.app.user.DTOs.UserResponseDTO;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ public interface UserService {
     List<UserEntity> fetchUserList();
 
     // Update operation
-    UserEntity updateUser(UserEntity user, Long userId);
+    UserResponseDTO updateUser(UpdateUserDTO user, Long userId);
 
     ResponseDTO createUser (CreateUserDTO user);
 
