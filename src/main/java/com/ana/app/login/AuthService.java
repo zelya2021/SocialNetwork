@@ -5,4 +5,5 @@ import com.ana.app.login.security.JwtResponse;
 
 public interface AuthService {
     JwtResponse authenticate(LoginDTO loginDTO);
+    void sendForgotPasswordEmail(String email);
 }

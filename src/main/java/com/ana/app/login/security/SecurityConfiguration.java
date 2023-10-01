@@ -24,8 +24,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((authz) -> authz
+                .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(antMatcher(HttpMethod.POST, "/auth/login")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST,"/auth/forgot-password")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST,"/users")).permitAll()
                         .anyRequest().authenticated()
                 ).csrf((csrf) -> csrf.ignoringRequestMatchers(antMatcher("/**")));

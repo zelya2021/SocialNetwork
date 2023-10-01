@@ -32,7 +32,7 @@ public class UserController {
         return userService.createUser(user);
     }
 
-    @GetMapping()
+    @GetMapping("/")
     public List<UserEntity> fetchUsersList()
     {
         return userService.fetchUserList();
