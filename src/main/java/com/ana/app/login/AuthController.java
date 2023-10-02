@@ -2,6 +2,7 @@ package com.ana.app.login;
 
 import com.ana.app.login.DTOs.ForgotPasswordDTO;
 import com.ana.app.login.DTOs.LoginDTO;
+import com.ana.app.login.DTOs.ResetPasswordDTO;
 import com.ana.app.login.security.JwtResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,14 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public String forgotPassword(@RequestBody ForgotPasswordDTO forgotPasswordDTO) {
-        authService.sendForgotPasswordEmail(forgotPasswordDTO.getEmail());
+    public String forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
+        authService.sendForgotPasswordEmail(forgotPasswordDTO);
         return "Password reset email sent!";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO) {
+        authService.resetPassword(resetPasswordDTO);
+        return "Password reset sent successfully!";
     }
 }

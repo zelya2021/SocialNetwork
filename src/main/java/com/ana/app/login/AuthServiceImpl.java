@@ -1,7 +1,9 @@
 package com.ana.app.login;
 
 import com.ana.app.common.SESV2EmailSender;
+import com.ana.app.login.DTOs.ForgotPasswordDTO;
 import com.ana.app.login.DTOs.LoginDTO;
+import com.ana.app.login.DTOs.ResetPasswordDTO;
 import com.ana.app.login.exceptions.BadRequestException;
 import com.ana.app.login.security.JwtResponse;
 import com.ana.app.login.security.JwtUtil;
@@ -35,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), userEntity.getPassword())) {
-            throw new BadRequestException("Passwords don`t match!");
+            throw new BadRequestException("Incorrect password!");
         }
 
         String token = JwtUtil.generateToken(loginDTO.getEmail());
@@ -43,13 +45,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void sendForgotPasswordEmail(String email) {
-        appService.setRecipientEmail(email);
+    public void sendForgotPasswordEmail(ForgotPasswordDTO forgotPasswordDTO) {
+        appService.setRecipientEmail(forgotPasswordDTO.getEmail());
         Random random = new Random();
         int resetPasswordCode = 10000 + random.nextInt(90000);
         appService.setResetPasswordCode(resetPasswordCode);
 
-        var userEntity = userRepository.findByEmail(email);
+        var userEntity = userRepository.findByEmail(forgotPasswordDTO.getEmail());
         if(userEntity == null)
             throw new BadRequestException("User do not found!");
 
@@ -57,5 +59,16 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(userEntity);
 
         appService.sendEmail();
+    }
+
+    @Override
+    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+        UserEntity userEntity = userRepository.findByResetPasswordCode(resetPasswordDTO.getResetPasswordCode());
+        if(userEntity == null)
+            throw new BadRequestException("Confirmation code is nor correct!");
+
+        userEntity.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
+        userEntity.setResetPasswordCode(null);
+        userRepository.save(userEntity);
     }
 }

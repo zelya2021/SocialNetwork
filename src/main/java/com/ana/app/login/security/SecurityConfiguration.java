@@ -27,6 +27,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers(antMatcher(HttpMethod.POST, "/auth/login")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST,"/auth/forgot-password")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.POST,"/auth/reset-password")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST,"/users")).permitAll()
                         .anyRequest().authenticated()
                 ).csrf((csrf) -> csrf.ignoringRequestMatchers(antMatcher("/**")));
