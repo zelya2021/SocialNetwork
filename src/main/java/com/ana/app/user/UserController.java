@@ -42,6 +42,12 @@ public class UserController {
         return userService.fetchUserList();
     }
 
+    @GetMapping("/{id}")
+    public UserResponseDTO getUserById(@PathVariable("id") Long id)
+    {
+        return userService.getUserById(id);
+    }
+
     @PutMapping("/{id}")
     public UserResponseDTO updateUser(@RequestBody UpdateUserDTO user, @PathVariable("id") Long id)
     {

@@ -17,4 +17,5 @@ public interface UserService {
 
     void changeUserPassword(ChangeUserPasswordDTO user);
     UserResponseDTO editCurrentUser(UpdateUserDTO user);
+    UserResponseDTO getUserById(Long userId);
 }

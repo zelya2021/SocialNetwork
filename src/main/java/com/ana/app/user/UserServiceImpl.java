@@ -106,4 +106,15 @@ public class UserServiceImpl implements UserService{
         userRepository.save(userEntity);
         return userMapper.updateUserDTOToUserResponseDTO(user);
     }
+
+    public UserResponseDTO getUserById(Long userId){
+        Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
+
+        if (!userEntityOptional.isPresent()) {
+            throw new BadRequestException("User do not exist!");
+        }
+
+        var userEntity = userEntityOptional.get();
+        return userMapper.toUserResponseDTO(userEntity);
+    }
 }
