@@ -96,4 +96,14 @@ public class UserServiceImpl implements UserService{
             throw new BadRequestException("Invalid old password");
         }
     }
+
+    public UserResponseDTO editCurrentUser(UpdateUserDTO user){
+        UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername());
+        userEntity.setName(user.getName());
+        userEntity.setLastName(user.getLastName());
+        userEntity.setEmail(user.getEmail());
+        userRepository.save(userEntity);
+        return userMapper.updateUserDTOToUserResponseDTO(user);
+    }
 }

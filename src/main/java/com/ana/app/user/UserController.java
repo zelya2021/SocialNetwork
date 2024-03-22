@@ -24,6 +24,12 @@ public class UserController {
         return ResponseEntity.ok(userService.getMe());
     }
 
+    @PutMapping("/me")
+    public UserResponseDTO editCurrentUser(@Valid @RequestBody UpdateUserDTO user) {
+
+        return userService.editCurrentUser(user);
+    }
+
     @PostMapping()
     public ResponseDTO createUser(@Valid @RequestBody CreateUserDTO user)
     {
