@@ -6,9 +6,11 @@ import com.ana.app.user.Mappers.UserMapper;
 import io.jsonwebtoken.lang.Strings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -80,5 +82,18 @@ public class UserServiceImpl implements UserService{
     }
     public UserResponseDTO getUserResponseDTO(UserEntity user) {
         return userMapper.toUserResponseDTO(user);
+    }
+
+    public void changeUserPassword(ChangeUserPasswordDTO user){
+        UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(passwordEncoder.matches(user.oldPassword, userDetails.getPassword()))
+        {
+            UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername());
+            userEntity.setPassword(passwordEncoder.encode(user.newPassword));
+            userRepository.save(userEntity);
+        }
+        else {
+            throw new BadRequestException("Invalid old password");
+        }
     }
 }

@@ -1,9 +1,7 @@
 package com.ana.app.user;
 
-import com.ana.app.user.DTOs.CreateUserDTO;
-import com.ana.app.user.DTOs.ResponseDTO;
-import com.ana.app.user.DTOs.UpdateUserDTO;
-import com.ana.app.user.DTOs.UserResponseDTO;
+import com.ana.app.common.DTOs.StatusDTO;
+import com.ana.app.user.DTOs.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +43,16 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteDepartmentById(@PathVariable("id") Long id)
+    public StatusDTO deleteUserById(@PathVariable("id") Long id)
     {
         userService.deleteUserById(id);
-        return "Deleted Successfully";
+        return new StatusDTO("Deleted Successfully");
+    }
+
+    @PutMapping("/change-password")
+    public StatusDTO changeUserPassword(@RequestBody ChangeUserPasswordDTO user)
+    {
+        userService.changeUserPassword(user);
+        return new StatusDTO("Password changed Successfully!");
     }
 }
