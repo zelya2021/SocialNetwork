@@ -1,7 +1,7 @@
 package com.ana.app.user;
 
 import com.ana.app.user.DTOs.*;
-import org.springframework.data.domain.Page;
+import com.ana.app.user.Entities.UserEntity;
 
 import java.util.List;
 

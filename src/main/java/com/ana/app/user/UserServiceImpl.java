@@ -2,12 +2,12 @@ package com.ana.app.user;
 
 import com.ana.app.login.exceptions.BadRequestException;
 import com.ana.app.user.DTOs.*;
+import com.ana.app.user.Entities.UserEntity;
 import com.ana.app.user.Mappers.UserMapper;
 import io.jsonwebtoken.lang.Strings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

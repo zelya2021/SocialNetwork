@@ -1,13 +1,13 @@
-package com.ana.app.user;
+package com.ana.app.user.Entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ana.app.friend.entities.FriendRequestEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -23,4 +23,7 @@ public class UserEntity {
     private String email;
     private String password;
     private Integer resetPasswordCode;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<FriendRequestEntity> friendRequestList;
 }

@@ -2,6 +2,7 @@ package com.ana.app.user;
 
 import com.ana.app.common.DTOs.StatusDTO;
 import com.ana.app.user.DTOs.*;
+import com.ana.app.user.Entities.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

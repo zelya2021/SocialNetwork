@@ -7,7 +7,7 @@ import com.ana.app.login.DTOs.ResetPasswordDTO;
 import com.ana.app.login.exceptions.BadRequestException;
 import com.ana.app.login.security.JwtResponse;
 import com.ana.app.login.security.JwtUtil;
-import com.ana.app.user.UserEntity;
+import com.ana.app.user.Entities.UserEntity;
 import com.ana.app.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
