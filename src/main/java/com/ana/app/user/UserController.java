@@ -67,4 +67,10 @@ public class UserController {
         userService.changeUserPassword(user);
         return new StatusDTO("Password changed Successfully!");
     }
+
+    @GetMapping("/pagination")
+    public UserPageDTO getAllUsers(@RequestParam(defaultValue = "1") int page,
+                                   @RequestParam(defaultValue = "50") int limit) {
+        return userService.findPaginatedDTO(page, limit);
+    }
 }

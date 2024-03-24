@@ -6,16 +6,18 @@ import com.ana.app.user.Mappers.UserMapper;
 import io.jsonwebtoken.lang.Strings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -116,5 +118,21 @@ public class UserServiceImpl implements UserService{
 
         var userEntity = userEntityOptional.get();
         return userMapper.toUserResponseDTO(userEntity);
+    }
+
+    public UserPageDTO findPaginatedDTO(int pageNo, int pageSize) {
+        Page<UserEntity> userPage = userRepository.findAll(PageRequest.of(pageNo - 1, pageSize));
+        List<UserResponseDTO> userDTOs = userPage.getContent().stream()
+                .map(user -> new UserResponseDTO(user.getName(), user.getLastName(), user.getEmail()))
+                .collect(Collectors.toList());
+
+        UserPageDTO userPageDTO = new UserPageDTO();
+        userPageDTO.setUsers(userDTOs);
+        userPageDTO.setPageNumber(userPage.getNumber() + 1); // +1 to adjust for zero-based pages
+        userPageDTO.setPageSize(userPage.getSize());
+        userPageDTO.setTotalElements(userPage.getTotalElements());
+        userPageDTO.setTotalPages(userPage.getTotalPages());
+
+        return userPageDTO;
     }
 }

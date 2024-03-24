@@ -1,6 +1,7 @@
 package com.ana.app.user;
 
 import com.ana.app.user.DTOs.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,4 +19,5 @@ public interface UserService {
     void changeUserPassword(ChangeUserPasswordDTO user);
     UserResponseDTO editCurrentUser(UpdateUserDTO user);
     UserResponseDTO getUserById(Long userId);
+    UserPageDTO findPaginatedDTO(int pageNo, int pageSize);
 }
