@@ -1,13 +1,10 @@
 package com.ana.app.user.Entities;
 
-import com.ana.app.friend.entities.FriendRequestEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Entity
 @Data
@@ -24,6 +21,11 @@ public class UserEntity {
     private String password;
     private Integer resetPasswordCode;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FriendRequestEntity> friendRequestList;
+    public UserEntity(long id, String name, String lastName, String email, String password){
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
 }

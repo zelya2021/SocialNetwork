@@ -1,6 +1,6 @@
 package com.ana.app.friend.entities;
 
-import com.ana.app.friend.enums.StatusOfFriendRequestEnum;
+import com.ana.app.friend.enums.StatusOfFriendshipRequestEnum;
 import com.ana.app.user.Entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,11 +15,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FriendRequestEntity {
+public class FriendshipRequestEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private StatusOfFriendRequestEnum status;
+    private StatusOfFriendshipRequestEnum status;
     private Date timeOfReceipt;
 
     @ManyToOne(fetch = FetchType.LAZY)

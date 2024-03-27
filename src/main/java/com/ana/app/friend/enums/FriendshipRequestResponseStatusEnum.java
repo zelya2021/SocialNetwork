@@ -1,5 +1,5 @@
 package com.ana.app.friend.enums;
 
-public enum FriendResponseStatusEnum {
+public enum FriendshipRequestResponseStatusEnum {
     FRIEND_REQUEST_CREATED
 }
