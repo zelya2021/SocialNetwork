@@ -1,11 +1,11 @@
-package com.ana.app.friend;
+package com.ana.app.friendship;
 
-import com.ana.app.friend.DTOs.CreateFriendshipRequestDTO;
-import com.ana.app.friend.DTOs.FriendshipResponseDTO;
-import com.ana.app.friend.DTOs.IncomingFriendshipRequestDTO;
-import com.ana.app.friend.entities.FriendshipRequestEntity;
-import com.ana.app.friend.enums.FriendshipRequestResponseStatusEnum;
-import com.ana.app.friend.enums.StatusOfFriendshipRequestEnum;
+import com.ana.app.friendship.DTOs.CreateFriendshipRequestDTO;
+import com.ana.app.friendship.DTOs.FriendshipResponseDTO;
+import com.ana.app.friendship.DTOs.IncomingFriendshipRequestDTO;
+import com.ana.app.friendship.entities.FriendshipRequestEntity;
+import com.ana.app.friendship.enums.FriendshipRequestResponseStatusEnum;
+import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
 import com.ana.app.login.exceptions.BadRequestException;
 import com.ana.app.user.Entities.UserEntity;
 import com.ana.app.user.Mappers.UserMapper;

@@ -1,8 +1,8 @@
 package com.ana.app.local;
 
-import com.ana.app.friend.FriendshipRequestRepository;
-import com.ana.app.friend.entities.FriendshipRequestEntity;
-import com.ana.app.friend.enums.StatusOfFriendshipRequestEnum;
+import com.ana.app.friendship.FriendshipRequestRepository;
+import com.ana.app.friendship.entities.FriendshipRequestEntity;
+import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
 import com.ana.app.user.Entities.UserEntity;
 import com.ana.app.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

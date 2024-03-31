@@ -1,6 +1,6 @@
-package com.ana.app.friend;
+package com.ana.app.friendship;
 
-import com.ana.app.friend.entities.FriendshipRequestEntity;
+import com.ana.app.friendship.entities.FriendshipRequestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

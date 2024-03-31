@@ -1,4 +1,4 @@
-package com.ana.app.friend.enums;
+package com.ana.app.friendship.enums;
 
 public enum StatusOfFriendshipRequestEnum {
     ACCEPT,

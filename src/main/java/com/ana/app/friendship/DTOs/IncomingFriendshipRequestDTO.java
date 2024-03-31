@@ -1,6 +1,6 @@
-package com.ana.app.friend.DTOs;
+package com.ana.app.friendship.DTOs;
 
-import com.ana.app.friend.enums.StatusOfFriendshipRequestEnum;
+import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
 import com.ana.app.user.DTOs.UserResponseDTO;
 import lombok.Data;
 

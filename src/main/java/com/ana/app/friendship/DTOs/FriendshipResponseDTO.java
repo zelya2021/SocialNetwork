@@ -1,6 +1,6 @@
-package com.ana.app.friend.DTOs;
+package com.ana.app.friendship.DTOs;
 
-import com.ana.app.friend.enums.FriendshipRequestResponseStatusEnum;
+import com.ana.app.friendship.enums.FriendshipRequestResponseStatusEnum;
 
 public class FriendshipResponseDTO {
     public FriendshipRequestResponseStatusEnum status;

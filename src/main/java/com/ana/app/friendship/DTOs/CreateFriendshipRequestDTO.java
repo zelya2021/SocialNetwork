@@ -1,4 +1,4 @@
-package com.ana.app.friend.DTOs;
+package com.ana.app.friendship.DTOs;
 
 import lombok.Data;
 

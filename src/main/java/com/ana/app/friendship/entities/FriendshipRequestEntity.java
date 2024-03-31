@@ -1,6 +1,6 @@
-package com.ana.app.friend.entities;
+package com.ana.app.friendship.entities;
 
-import com.ana.app.friend.enums.StatusOfFriendshipRequestEnum;
+import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
 import com.ana.app.user.Entities.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
