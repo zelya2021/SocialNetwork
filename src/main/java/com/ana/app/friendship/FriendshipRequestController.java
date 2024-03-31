@@ -26,4 +26,10 @@ public class FriendshipRequestController {
     {
         return friendshipRequestService.getIncomingFriendshipRequests();
     }
+
+    @PostMapping("/{id}/accept")
+    public FriendshipResponseDTO acceptFriendshipRequests(@PathVariable("id") Long id)
+    {
+        return friendshipRequestService.acceptFriendshipRequests(id);
+    }
 }

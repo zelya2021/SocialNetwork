@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -20,6 +23,9 @@ public class UserEntity {
     private String email;
     private String password;
     private Integer resetPasswordCode;
+
+    @ManyToMany
+    private Set<UserEntity> friends = new HashSet<>();
 
     public UserEntity(long id, String name, String lastName, String email, String password){
         this.id = id;

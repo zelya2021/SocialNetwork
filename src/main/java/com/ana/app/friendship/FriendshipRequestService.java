@@ -9,4 +9,5 @@ import java.util.List;
 public interface FriendshipRequestService {
     FriendshipResponseDTO createFriendRequest(CreateFriendshipRequestDTO friendRequest);
     List<IncomingFriendshipRequestDTO> getIncomingFriendshipRequests();
+    FriendshipResponseDTO acceptFriendshipRequests(Long id);
 }
