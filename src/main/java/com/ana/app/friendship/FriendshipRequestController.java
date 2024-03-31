@@ -32,4 +32,10 @@ public class FriendshipRequestController {
     {
         return friendshipRequestService.acceptFriendshipRequests(id);
     }
+
+    @PostMapping("/{id}/decline")
+    public FriendshipResponseDTO declineFriendshipRequests(@PathVariable("id") Long id)
+    {
+        return friendshipRequestService.declineFriendshipRequests(id);
+    }
 }

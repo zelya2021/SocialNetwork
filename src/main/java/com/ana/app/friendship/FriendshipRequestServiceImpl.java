@@ -93,4 +93,12 @@ public class FriendshipRequestServiceImpl implements FriendshipRequestService {
         friendshipRequestRepository.save(friendRequestDetails);
         return new FriendshipResponseDTO(FriendshipRequestResponseStatusEnum.FRIEND_REQUEST_ACCEPTED);
     }
+
+    public FriendshipResponseDTO declineFriendshipRequests(Long id){
+        var friendRequestDetails = friendshipRequestRepository.getFriendshipRequestEntityById(id).get();
+        friendRequestDetails.setStatus(StatusOfFriendshipRequestEnum.DECLINED);
+        friendshipRequestRepository.save(friendRequestDetails);
+
+        return new FriendshipResponseDTO(FriendshipRequestResponseStatusEnum.FRIEND_REQUEST_DECLINED);
+    }
 }
