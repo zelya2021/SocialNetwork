@@ -1,4 +1,4 @@
-package com.ana.app.login.security;
+package com.ana.app.auth.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

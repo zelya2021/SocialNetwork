@@ -1,10 +1,20 @@
 package com.ana.app.friendship.DTOs;
 
-import com.ana.app.friendship.enums.FriendshipRequestResponseStatusEnum;
+import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
+import com.ana.app.user.DTOs.UserResponseDTO;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FriendshipResponseDTO {
-    public FriendshipRequestResponseStatusEnum status;
-    public FriendshipResponseDTO(FriendshipRequestResponseStatusEnum status){
-        this.status = status;
-    }
+    public Long id;
+    public Date timeOfReceipt;
+    public UserResponseDTO sender;
+    public UserResponseDTO recipient;
+    public StatusOfFriendshipRequestEnum status;
 }

@@ -1,4 +1,4 @@
-package com.ana.app.login.security;
+package com.ana.app.auth.security;
 
 public class JwtResponse {
     private String token;

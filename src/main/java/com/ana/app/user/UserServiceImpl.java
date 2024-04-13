@@ -1,12 +1,16 @@
 package com.ana.app.user;
 
-import com.ana.app.login.exceptions.BadRequestException;
+import com.ana.app.common.DTOs.PaginatedResponseDTO;
+import com.ana.app.auth.exceptions.BadRequestException;
 import com.ana.app.user.DTOs.*;
 import com.ana.app.user.Entities.UserEntity;
 import com.ana.app.user.Mappers.UserMapper;
 import io.jsonwebtoken.lang.Strings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,17 +31,14 @@ public class UserServiceImpl implements UserService{
     private BCryptPasswordEncoder passwordEncoder;
 
     private static final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-    @Override
-    public List<UserEntity> fetchUserList() {
-        return (List<UserEntity>) userRepository.findAll();
-    }
 
     @Override
+    @CachePut(value = "users", key = "#userId")
     public UserResponseDTO updateUser(UpdateUserDTO userDto, Long userId) {
         Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
 
-        if (!userEntityOptional.isPresent()) {
-            throw new BadRequestException("User do not exist!");
+        if (userEntityOptional.isEmpty()) {
+            throw new BadRequestException("User with provided id does not exist");
         }
 
         var userEntity = userEntityOptional.get();
@@ -50,40 +51,31 @@ public class UserServiceImpl implements UserService{
         userEntity.setEmail(userDto.getEmail());
 
         userRepository.save(userEntity);
-        return getUserResponseDTO(userEntity);
+        return userMapper.toUserResponseDTO(userEntity);
     }
 
     @Override
     public UserResponseDTO getMe() {
         UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var userEntity = userRepository.findByEmail(userDetails.getUsername());
-        return UserResponseDTO.builder()
-                .name(userEntity.getName())
-                .lastName((userEntity.getLastName()))
-                .email(userEntity.getEmail()).build();
+        return userMapper.toUserResponseDTO(userEntity);
     }
 
     @Override
-    public ResponseDTO createUser(CreateUserDTO userDTO) {
+    public UserResponseDTO createUser(CreateUserDTO userDTO) {
         var existingUser = userRepository.findByEmail(userDTO.getEmail());
         if(existingUser != null)
             throw new BadRequestException("User already exist!");
-        UserEntity userEntity = getUserEntity(userDTO);
+        UserEntity userEntity = userMapper.fromCreateUserDTOtoUserEntity(userDTO);
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(userEntity);
-        return new ResponseDTO(ResponseStatusEnum.USER_CREATED);
+        return userMapper.toUserResponseDTO(userEntity);
     }
 
     @Override
+    @CacheEvict(value = "users", key = "#userId")
     public void deleteUserById(Long userId) {
         userRepository.deleteById(userId);
-    }
-
-    public UserEntity getUserEntity(CreateUserDTO user) {
-        return userMapper.toEntity(user);
-    }
-    public UserResponseDTO getUserResponseDTO(UserEntity user) {
-        return userMapper.toUserResponseDTO(user);
     }
 
     public void changeUserPassword(ChangeUserPasswordDTO user){
@@ -106,27 +98,29 @@ public class UserServiceImpl implements UserService{
         userEntity.setLastName(user.getLastName());
         userEntity.setEmail(user.getEmail());
         userRepository.save(userEntity);
-        return userMapper.updateUserDTOToUserResponseDTO(user);
+        return userMapper.toUserResponseDTO(userEntity);
     }
 
+    @Cacheable(value = "users", key = "#userId")
     public UserResponseDTO getUserById(Long userId){
         Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
 
-        if (!userEntityOptional.isPresent()) {
-            throw new BadRequestException("User do not exist!");
+        if (userEntityOptional.isEmpty()) {
+            throw new BadRequestException("User with provided id does not exist!");
         }
 
         var userEntity = userEntityOptional.get();
         return userMapper.toUserResponseDTO(userEntity);
     }
 
-    public UserPageDTO findPaginatedDTO(int pageNo, int pageSize) {
+    @Cacheable(value = "usersPageCache", key = "'usersPage:' + #pageNo + ':' + #pageSize")
+    public PaginatedResponseDTO<UserResponseDTO> findPaginatedDTO(int pageNo, int pageSize) {
         Page<UserEntity> userPage = userRepository.findAll(PageRequest.of(pageNo - 1, pageSize));
         List<UserResponseDTO> userDTOs = userPage.getContent().stream()
-                .map(user -> new UserResponseDTO(user.getName(), user.getLastName(), user.getEmail()))
+                .map(user -> new UserResponseDTO(user.getId(),user.getName(), user.getLastName(), user.getEmail()))
                 .collect(Collectors.toList());
 
-        UserPageDTO userPageDTO = new UserPageDTO();
+        PaginatedResponseDTO<UserResponseDTO> userPageDTO = new PaginatedResponseDTO<>();
         userPageDTO.setUsers(userDTOs);
         userPageDTO.setPageNumber(userPage.getNumber() + 1); // +1 to adjust for zero-based pages
         userPageDTO.setPageSize(userPage.getSize());

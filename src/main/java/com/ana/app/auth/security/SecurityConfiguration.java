@@ -1,4 +1,4 @@
-package com.ana.app.login.security;
+package com.ana.app.auth.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +29,9 @@ public class SecurityConfiguration {
                         .requestMatchers(antMatcher(HttpMethod.POST,"/auth/forgot-password")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST,"/auth/reset-password")).permitAll()
                         .requestMatchers(antMatcher(HttpMethod.POST,"/users")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET,"/actuator/**")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET,"/swagger-ui/**")).permitAll()
+                        .requestMatchers(antMatcher(HttpMethod.GET,"/v3/api-docs/**")).permitAll()
                         .anyRequest().authenticated()
                 ).csrf((csrf) -> csrf.ignoringRequestMatchers(antMatcher("/**")));
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

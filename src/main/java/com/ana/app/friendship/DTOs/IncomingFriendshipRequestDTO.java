@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Data
 public class IncomingFriendshipRequestDTO {
+    private Long id;
     private StatusOfFriendshipRequestEnum status;
     private Date timeOfReceipt;
     private UserResponseDTO sender;

@@ -1,4 +1,4 @@
-package com.ana.app.login.exceptions;
+package com.ana.app.auth.exceptions;
 
 import lombok.Getter;
 import lombok.Setter;

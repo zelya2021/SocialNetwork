@@ -1,12 +1,12 @@
-package com.ana.app.login;
+package com.ana.app.auth;
 
 import com.ana.app.common.SESV2EmailSender;
-import com.ana.app.login.DTOs.ForgotPasswordDTO;
-import com.ana.app.login.DTOs.LoginDTO;
-import com.ana.app.login.DTOs.ResetPasswordDTO;
-import com.ana.app.login.exceptions.BadRequestException;
-import com.ana.app.login.security.JwtResponse;
-import com.ana.app.login.security.JwtUtil;
+import com.ana.app.auth.DTOs.ForgotPasswordDTO;
+import com.ana.app.auth.DTOs.LoginDTO;
+import com.ana.app.auth.DTOs.ResetPasswordDTO;
+import com.ana.app.auth.exceptions.BadRequestException;
+import com.ana.app.auth.security.JwtResponse;
+import com.ana.app.auth.security.JwtUtil;
 import com.ana.app.user.Entities.UserEntity;
 import com.ana.app.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class AuthServiceImpl implements AuthService {
 
         var userEntity = userRepository.findByEmail(forgotPasswordDTO.getEmail());
         if(userEntity == null)
-            throw new BadRequestException("User do not found!");
+            throw new BadRequestException("User does not found!");
 
         userEntity.setResetPasswordCode(resetPasswordCode);
         userRepository.save(userEntity);
@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
     public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
         UserEntity userEntity = userRepository.findByResetPasswordCode(resetPasswordDTO.getResetPasswordCode());
         if(userEntity == null)
-            throw new BadRequestException("Confirmation code is nor correct!");
+            throw new BadRequestException("Confirmation code is not correct!");
 
         userEntity.setPassword(passwordEncoder.encode(resetPasswordDTO.getNewPassword()));
         userEntity.setResetPasswordCode(null);

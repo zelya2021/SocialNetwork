@@ -29,4 +29,5 @@ public class FriendshipRequestEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     private UserEntity sender;
+
 }

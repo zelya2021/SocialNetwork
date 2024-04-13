@@ -1,4 +1,4 @@
-package com.ana.app.login.security;
+package com.ana.app.auth.security;
 
 import com.ana.app.user.Entities.UserEntity;
 import com.ana.app.user.UserRepository;

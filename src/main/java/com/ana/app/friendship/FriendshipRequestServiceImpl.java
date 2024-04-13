@@ -2,11 +2,11 @@ package com.ana.app.friendship;
 
 import com.ana.app.friendship.DTOs.CreateFriendshipRequestDTO;
 import com.ana.app.friendship.DTOs.FriendshipResponseDTO;
-import com.ana.app.friendship.DTOs.IncomingFriendshipRequestDTO;
 import com.ana.app.friendship.entities.FriendshipRequestEntity;
-import com.ana.app.friendship.enums.FriendshipRequestResponseStatusEnum;
 import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
-import com.ana.app.login.exceptions.BadRequestException;
+import com.ana.app.auth.exceptions.BadRequestException;
+import com.ana.app.mapper.FriendshipMapper;
+import com.ana.app.user.DTOs.UserResponseDTO;
 import com.ana.app.user.Entities.UserEntity;
 import com.ana.app.user.Mappers.UserMapper;
 import com.ana.app.user.UserRepository;
@@ -30,6 +30,7 @@ public class FriendshipRequestServiceImpl implements FriendshipRequestService {
     private UserRepository userRepository;
 
     private static final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private static final FriendshipMapper friendshipMapper = Mappers.getMapper(FriendshipMapper.class);
 
     public FriendshipResponseDTO createFriendRequest(CreateFriendshipRequestDTO friendRequestDto){
         UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -48,7 +49,8 @@ public class FriendshipRequestServiceImpl implements FriendshipRequestService {
         friendshipRequestEntity.setSender(userEntity);
 
         friendshipRequestRepository.save(friendshipRequestEntity);
-        return new FriendshipResponseDTO(FriendshipRequestResponseStatusEnum.FRIEND_REQUEST_CREATED);
+
+        return friendshipMapper.friendshipRequestEntityToFriendshipResponseDTO(friendshipRequestEntity);
     }
 
     public void isFriendRequestAlreadyExist(Long senderId, Long recipientId) {
@@ -57,7 +59,7 @@ public class FriendshipRequestServiceImpl implements FriendshipRequestService {
             throw new BadRequestException("Friend request already exist!");
     }
 
-    public List<IncomingFriendshipRequestDTO> getIncomingFriendshipRequests(){
+    public List<FriendshipResponseDTO> getIncomingFriendshipRequests(){
         UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var userEntity = userRepository.findByEmail(userDetails.getUsername());
 
@@ -66,39 +68,49 @@ public class FriendshipRequestServiceImpl implements FriendshipRequestService {
             throw new BadRequestException("You dont have friend requests!");
 
         return friendRequestDetails.stream()
-                .map(this::convertToDto)
+                .filter(friendRequest -> StatusOfFriendshipRequestEnum.PENDING.equals(friendRequest.getStatus()))
+                .map(friendshipMapper::friendshipRequestEntityToFriendshipResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public IncomingFriendshipRequestDTO convertToDto(FriendshipRequestEntity entity) {
-        IncomingFriendshipRequestDTO dto = new IncomingFriendshipRequestDTO();
-        dto.setStatus(entity.getStatus());
-        dto.setTimeOfReceipt(entity.getTimeOfReceipt());
-        dto.setSender(userMapper.toUserResponseDTO(entity.getSender()));
-        return dto;
-    }
-
     public FriendshipResponseDTO acceptFriendshipRequests(Long id){
-        var friendRequestDetails = friendshipRequestRepository.getFriendshipRequestEntityById(id).get();
-        friendRequestDetails.setStatus(StatusOfFriendshipRequestEnum.ACCEPTED);
+        var friendRequestDetails = friendshipRequestRepository.getFriendshipRequestEntityById(id);
+        if (friendRequestDetails.isEmpty())
+            throw new BadRequestException("Friend Request does not exist!");
+
+        var friendshipEntity = friendRequestDetails.get();
+        friendshipEntity.setStatus(StatusOfFriendshipRequestEnum.ACCEPTED);
 
         UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var userEntity = userRepository.findByEmail(userDetails.getUsername());
 
         Set<UserEntity> currentFriends = userEntity.getFriends();
-        currentFriends.add(friendRequestDetails.getSender());
+        currentFriends.add(friendshipEntity.getSender());
         userEntity.setFriends(currentFriends);
         userRepository.save(userEntity);
 
-        friendshipRequestRepository.save(friendRequestDetails);
-        return new FriendshipResponseDTO(FriendshipRequestResponseStatusEnum.FRIEND_REQUEST_ACCEPTED);
+        friendshipRequestRepository.save(friendshipEntity);
+        return friendshipMapper.friendshipRequestEntityToFriendshipResponseDTO(friendshipEntity);
     }
 
     public FriendshipResponseDTO declineFriendshipRequests(Long id){
-        var friendRequestDetails = friendshipRequestRepository.getFriendshipRequestEntityById(id).get();
-        friendRequestDetails.setStatus(StatusOfFriendshipRequestEnum.DECLINED);
-        friendshipRequestRepository.save(friendRequestDetails);
+        var friendRequestDetails = friendshipRequestRepository.getFriendshipRequestEntityById(id);
+        if (friendRequestDetails.isEmpty())
+            throw new BadRequestException("Friend Request does not exist!");
 
-        return new FriendshipResponseDTO(FriendshipRequestResponseStatusEnum.FRIEND_REQUEST_DECLINED);
+        var friendshipEntity = friendRequestDetails.get();
+        friendshipEntity.setStatus(StatusOfFriendshipRequestEnum.DECLINED);
+        friendshipRequestRepository.save(friendshipEntity);
+
+        return friendshipMapper.friendshipRequestEntityToFriendshipResponseDTO(friendshipEntity);
+    }
+
+    public List<UserResponseDTO> getFriends(String email){
+        var userEntity = userRepository.findByEmail(email);
+
+        return userEntity.getFriends()
+                .stream()
+                .map(userMapper::toUserResponseDTO)
+                .collect(Collectors.toList());
     }
 }

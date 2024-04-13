@@ -1,4 +1,4 @@
-package com.ana.app.login.DTOs;
+package com.ana.app.auth.DTOs;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
