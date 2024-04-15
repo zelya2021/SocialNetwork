@@ -3,15 +3,13 @@ package com.ana.app.chat;
 import com.ana.app.chat.DTOs.ChatResponseDTO;
 import com.ana.app.chat.DTOs.CreateDirectChatDTO;
 import com.ana.app.chat.DTOs.CreateGroupChatDTO;
+import com.ana.app.chat.DTOs.DeleteChatDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Chat Management", description = "Chat management operations")
 @RestController
@@ -47,11 +45,22 @@ public class ChatController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
-            @ApiResponse(responseCode = "400", description = "User/users with provided ids not found!"),
+            @ApiResponse(responseCode = "400", description = "User/users with provided ids does not found!"),
             @ApiResponse(responseCode = "400", description = "Chat with this users ids does not exist!")})
     @PostMapping("update-group-chat")
     public ChatResponseDTO updateGroupChat(@RequestBody CreateGroupChatDTO updateChatDTO)
     {
         return chatService.updateGroupChat(updateChatDTO);
+    }
+
+    @Operation(summary = "Delete direct chat")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "403", description = "Non authorized user"),
+            @ApiResponse(responseCode = "400", description = "Chat with this id does not exist!")})
+    @DeleteMapping("delete-direct-chat/{id}")
+    public DeleteChatDTO deleteDirectChat(@PathVariable("id") Long id)
+    {
+        return chatService.deleteDirectChat(id);
     }
 }

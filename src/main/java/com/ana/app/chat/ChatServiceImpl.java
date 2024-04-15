@@ -4,6 +4,7 @@ import com.ana.app.auth.exceptions.BadRequestException;
 import com.ana.app.chat.DTOs.ChatResponseDTO;
 import com.ana.app.chat.DTOs.CreateDirectChatDTO;
 import com.ana.app.chat.DTOs.CreateGroupChatDTO;
+import com.ana.app.chat.DTOs.DeleteChatDTO;
 import com.ana.app.chat.Entities.ChatEntity;
 import com.ana.app.chat.Mappers.ChatMapper;
 import com.ana.app.chat.enums.TypeOfChat;
@@ -92,5 +93,16 @@ public class ChatServiceImpl implements ChatService{
 
         chatRepository.save(chatEntity);
         return chatMapper.fromChatEntityToChatResponseDTO(chatEntity);
+    }
+
+    public DeleteChatDTO deleteDirectChat(Long id) {
+        Optional<ChatEntity> IsChatEntity = chatRepository.findById(id);
+        if(IsChatEntity.isEmpty())
+            throw new BadRequestException("Chat with this id does not exist!");
+
+        var chatEntity = IsChatEntity.get();
+        chatRepository.delete(chatEntity);
+
+        return new DeleteChatDTO(chatEntity.getId());
     }
 }
