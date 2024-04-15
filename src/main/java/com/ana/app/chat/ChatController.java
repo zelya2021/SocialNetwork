@@ -38,8 +38,20 @@ public class ChatController {
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
             @ApiResponse(responseCode = "400", description = "User/users with provided ids not found!")})
     @PostMapping("create-group-chat")
-    public ChatResponseDTO createGroupChat(@RequestBody CreateGroupChatDTO directChatDTO)
+    public ChatResponseDTO createGroupChat(@RequestBody CreateGroupChatDTO groupChatDTO)
     {
-        return chatService.createGroupChat(directChatDTO);
+        return chatService.createGroupChat(groupChatDTO);
+    }
+
+    @Operation(summary = "Update group chat")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "403", description = "Non authorized user"),
+            @ApiResponse(responseCode = "400", description = "User/users with provided ids not found!"),
+            @ApiResponse(responseCode = "400", description = "Chat with this users ids does not exist!")})
+    @PostMapping("update-group-chat")
+    public ChatResponseDTO updateGroupChat(@RequestBody CreateGroupChatDTO updateChatDTO)
+    {
+        return chatService.updateGroupChat(updateChatDTO);
     }
 }

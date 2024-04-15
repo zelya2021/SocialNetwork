@@ -7,4 +7,5 @@ import com.ana.app.chat.DTOs.CreateGroupChatDTO;
 public interface ChatService {
     ChatResponseDTO createDirectChat(CreateDirectChatDTO directChatDTO);
     ChatResponseDTO createGroupChat(CreateGroupChatDTO groupChatDTO);
+    ChatResponseDTO updateGroupChat(CreateGroupChatDTO updateChatDTO);
 }
