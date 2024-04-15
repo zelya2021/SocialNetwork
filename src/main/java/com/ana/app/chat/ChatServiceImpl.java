@@ -3,6 +3,7 @@ package com.ana.app.chat;
 import com.ana.app.auth.exceptions.BadRequestException;
 import com.ana.app.chat.DTOs.ChatResponseDTO;
 import com.ana.app.chat.DTOs.CreateDirectChatDTO;
+import com.ana.app.chat.DTOs.CreateGroupChatDTO;
 import com.ana.app.chat.Entities.ChatEntity;
 import com.ana.app.chat.Mappers.ChatMapper;
 import com.ana.app.chat.enums.TypeOfChat;
@@ -53,6 +54,21 @@ public class ChatServiceImpl implements ChatService{
         chatEntity.setMembers(setOfMembers);
         chatEntity.setNameOfChat(TypeOfChat.DIRECT.toString());
         chatEntity.setTypeOfChat(TypeOfChat.DIRECT);
+
+        chatRepository.save(chatEntity);
+        return chatMapper.fromChatEntityToChatResponseDTO(chatEntity);
+    }
+
+    public ChatResponseDTO createGroupChat(CreateGroupChatDTO groupChatDTO) {
+        var userEntities = userRepository.findByIdIn(groupChatDTO.getMembersIds());
+
+        if(userEntities.isEmpty())
+            throw new BadRequestException("User/users with provided ids not found!");
+
+        ChatEntity chatEntity = new ChatEntity();
+        chatEntity.setNameOfChat(groupChatDTO.getNameOfChat());
+        chatEntity.setMembers(userEntities);
+        chatEntity.setTypeOfChat(TypeOfChat.GROUP);
 
         chatRepository.save(chatEntity);
         return chatMapper.fromChatEntityToChatResponseDTO(chatEntity);

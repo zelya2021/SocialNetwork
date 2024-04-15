@@ -2,6 +2,7 @@ package com.ana.app.chat;
 
 import com.ana.app.chat.DTOs.ChatResponseDTO;
 import com.ana.app.chat.DTOs.CreateDirectChatDTO;
+import com.ana.app.chat.DTOs.CreateGroupChatDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -25,9 +26,21 @@ public class ChatController {
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
             @ApiResponse(responseCode = "400", description = "User with provided id not found!"),
             @ApiResponse(responseCode = "400", description = "Chat with this user id already exist!")})
-    @PostMapping()
+    @PostMapping("create-direct-chat")
     public ChatResponseDTO createDirectChat(@RequestBody CreateDirectChatDTO directChatDTO)
     {
         return chatService.createDirectChat(directChatDTO);
+    }
+
+    @Operation(summary = "Create group chat")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "403", description = "Non authorized user"),
+            @ApiResponse(responseCode = "400", description = "User with provided id not found!"),
+            @ApiResponse(responseCode = "400", description = "Chat with this user id already exist!")})
+    @PostMapping("create-group-chat")
+    public ChatResponseDTO createGroupChat(@RequestBody CreateGroupChatDTO directChatDTO)
+    {
+        return chatService.createGroupChat(directChatDTO);
     }
 }
