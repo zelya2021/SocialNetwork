@@ -62,8 +62,8 @@ public class ChatServiceImpl implements ChatService{
     public ChatResponseDTO createGroupChat(CreateGroupChatDTO groupChatDTO) {
         var userEntities = userRepository.findByIdIn(groupChatDTO.getMembersIds());
 
-        if(userEntities.isEmpty())
-            throw new BadRequestException("User/users with provided ids not found!");
+        if(userEntities.isEmpty() || userEntities.size() != groupChatDTO.getMembersIds().size())
+            throw new BadRequestException("User/users with provided ids does not found!");
 
         ChatEntity chatEntity = new ChatEntity();
         chatEntity.setNameOfChat(groupChatDTO.getNameOfChat());
