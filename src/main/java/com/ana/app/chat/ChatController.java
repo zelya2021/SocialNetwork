@@ -36,8 +36,7 @@ public class ChatController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
-            @ApiResponse(responseCode = "400", description = "User with provided id not found!"),
-            @ApiResponse(responseCode = "400", description = "Chat with this user id already exist!")})
+            @ApiResponse(responseCode = "400", description = "User/users with provided ids not found!")})
     @PostMapping("create-group-chat")
     public ChatResponseDTO createGroupChat(@RequestBody CreateGroupChatDTO directChatDTO)
     {

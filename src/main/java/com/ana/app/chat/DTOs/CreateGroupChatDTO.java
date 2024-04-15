@@ -8,7 +8,7 @@ import java.util.Set;
 @Data
 public class CreateGroupChatDTO {
     @Schema(description = "userIds it are the ids of the users you're planning to chat with", example = "[1,2]")
-    private Set<Long> membersIds;
+    private Set<Long> membersIds ;
 
     private String nameOfChat;
 }
