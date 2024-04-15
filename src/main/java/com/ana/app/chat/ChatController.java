@@ -61,6 +61,17 @@ public class ChatController {
     @DeleteMapping("delete-direct-chat/{id}")
     public DeleteChatDTO deleteDirectChat(@PathVariable("id") Long id)
     {
-        return chatService.deleteDirectChat(id);
+        return chatService.deleteChat(id);
+    }
+
+    @Operation(summary = "Delete group chat")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "403", description = "Non authorized user"),
+            @ApiResponse(responseCode = "400", description = "Chat with this id does not exist!")})
+    @DeleteMapping("delete-group-chat/{id}")
+    public DeleteChatDTO deleteGroupChat(@PathVariable("id") Long id)
+    {
+        return chatService.deleteChat(id);
     }
 }

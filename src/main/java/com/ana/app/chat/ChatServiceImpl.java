@@ -95,7 +95,7 @@ public class ChatServiceImpl implements ChatService{
         return chatMapper.fromChatEntityToChatResponseDTO(chatEntity);
     }
 
-    public DeleteChatDTO deleteDirectChat(Long id) {
+    public DeleteChatDTO deleteChat(Long id) {
         Optional<ChatEntity> IsChatEntity = chatRepository.findById(id);
         if(IsChatEntity.isEmpty())
             throw new BadRequestException("Chat with this id does not exist!");

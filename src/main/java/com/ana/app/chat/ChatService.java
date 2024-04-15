@@ -9,5 +9,5 @@ public interface ChatService {
     ChatResponseDTO createDirectChat(CreateDirectChatDTO directChatDTO);
     ChatResponseDTO createGroupChat(CreateGroupChatDTO groupChatDTO);
     ChatResponseDTO updateGroupChat(CreateGroupChatDTO updateChatDTO);
-    DeleteChatDTO deleteDirectChat(Long id);
+    DeleteChatDTO deleteChat(Long id);
 }
