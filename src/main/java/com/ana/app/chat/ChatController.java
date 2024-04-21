@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +49,7 @@ public class ChatController {
             @ApiResponse(responseCode = "400", description = "User/users with provided ids does not found!"),
             @ApiResponse(responseCode = "400", description = "Chat with this id does not exist!")})
     @PostMapping("group/{id}")
-    public ChatResponseDTO updateGroupChat(@PathVariable("id") Long id, @RequestBody CreateGroupChatDTO updateChatDTO)
+    public ChatResponseDTO updateGroupChat(@PathVariable("id") Long id, @RequestBody @Valid CreateGroupChatDTO updateChatDTO)
     {
         return chatService.updateGroupChat(id, updateChatDTO);
     }
