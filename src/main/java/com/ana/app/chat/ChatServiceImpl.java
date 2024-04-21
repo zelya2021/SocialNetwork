@@ -75,18 +75,16 @@ public class ChatServiceImpl implements ChatService{
         return chatMapper.fromChatEntityToChatResponseDTO(chatEntity);
     }
 
-    public ChatResponseDTO updateGroupChat(CreateGroupChatDTO updateChatDTO) {
-        var userEntities = userRepository.findByIdIn(updateChatDTO.getMembersIds());
+    public ChatResponseDTO updateGroupChat(Long id, CreateGroupChatDTO updateChatDTO) {
+        Optional<ChatEntity> chatEntityOptional = chatRepository.findById(id);
+        if(chatEntityOptional.isEmpty())
+            throw new BadRequestException("Chat with this id does not exist!");
 
+        var userEntities = userRepository.findByIdIn(updateChatDTO.getMembersIds());
         if(userEntities.isEmpty() || userEntities.size() != updateChatDTO.getMembersIds().size())
             throw new BadRequestException("User/users with provided ids not found!");
 
-        Optional<ChatEntity> IsChatEntity = chatRepository.findByMemberIds(
-                userEntities.stream().map(UserEntity::getId).collect(Collectors.toSet()));
-        if(IsChatEntity.isEmpty())
-            throw new BadRequestException("Chat with this users ids does not exist!");
-
-        var chatEntity = IsChatEntity.get();
+        var chatEntity = chatEntityOptional.get();
         chatEntity.setNameOfChat(updateChatDTO.getNameOfChat());
         chatEntity.setMembers(userEntities);
         chatEntity.setTypeOfChat(TypeOfChat.GROUP);

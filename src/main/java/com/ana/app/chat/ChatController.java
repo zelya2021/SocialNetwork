@@ -46,11 +46,11 @@ public class ChatController {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
             @ApiResponse(responseCode = "400", description = "User/users with provided ids does not found!"),
-            @ApiResponse(responseCode = "400", description = "Chat with this users ids does not exist!")})
-    @PostMapping("update-group-chat")
-    public ChatResponseDTO updateGroupChat(@RequestBody CreateGroupChatDTO updateChatDTO)
+            @ApiResponse(responseCode = "400", description = "Chat with this id does not exist!")})
+    @PostMapping("group/{id}")
+    public ChatResponseDTO updateGroupChat(@PathVariable("id") Long id, @RequestBody CreateGroupChatDTO updateChatDTO)
     {
-        return chatService.updateGroupChat(updateChatDTO);
+        return chatService.updateGroupChat(id, updateChatDTO);
     }
 
     @Operation(summary = "Delete direct chat")
