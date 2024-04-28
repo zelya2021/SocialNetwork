@@ -10,4 +10,5 @@ public interface ChatService {
     ChatResponseDTO createGroupChat(CreateGroupChatDTO groupChatDTO);
     ChatResponseDTO updateGroupChat(Long id, CreateGroupChatDTO updateChatDTO);
     DeleteChatDTO deleteChat(Long id);
+    ChatResponseDTO getChat(Long id);
 }

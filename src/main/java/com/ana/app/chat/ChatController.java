@@ -65,4 +65,14 @@ public class ChatController {
         return chatService.deleteChat(id);
     }
 
+    @Operation(summary = "Get chat")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "403", description = "Non authorized user"),
+            @ApiResponse(responseCode = "400", description = "Chat with this id does not exist!")})
+    @GetMapping("{id}")
+    public ChatResponseDTO getChat(@PathVariable("id") Long id)
+    {
+        return chatService.getChat(id);
+    }
 }
