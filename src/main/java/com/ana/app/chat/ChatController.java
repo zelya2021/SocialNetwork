@@ -4,6 +4,7 @@ import com.ana.app.chat.DTOs.ChatResponseDTO;
 import com.ana.app.chat.DTOs.CreateDirectChatDTO;
 import com.ana.app.chat.DTOs.CreateGroupChatDTO;
 import com.ana.app.chat.DTOs.DeleteChatDTO;
+import com.ana.app.common.DTOs.PaginatedResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -74,5 +75,16 @@ public class ChatController {
     public ChatResponseDTO getChat(@PathVariable("id") Long id)
     {
         return chatService.getChat(id);
+    }
+
+    @Operation(summary = "Get chats")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "403", description = "Non authorized user")})
+    @GetMapping()
+    public PaginatedResponseDTO<ChatResponseDTO> getChats(@RequestParam(defaultValue = "1") int page,
+                                                          @RequestParam(defaultValue = "50") int limit)
+    {
+        return chatService.getChats(page,limit);
     }
 }

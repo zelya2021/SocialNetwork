@@ -8,15 +8,21 @@ import com.ana.app.chat.DTOs.DeleteChatDTO;
 import com.ana.app.chat.Entities.ChatEntity;
 import com.ana.app.chat.Mappers.ChatMapper;
 import com.ana.app.chat.enums.TypeOfChat;
+import com.ana.app.common.DTOs.PaginatedResponseDTO;
+import com.ana.app.user.DTOs.UserResponseDTO;
 import com.ana.app.user.Entities.UserEntity;
+import com.ana.app.user.Mappers.UserMapper;
 import com.ana.app.user.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -30,6 +36,7 @@ public class ChatServiceImpl implements ChatService{
     private UserRepository userRepository;
 
     private static final ChatMapper chatMapper = Mappers.getMapper(ChatMapper.class);
+    private static final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     public ChatResponseDTO createDirectChat(CreateDirectChatDTO directChatDTO) {
         Optional<UserEntity> userEntity = userRepository.findById(directChatDTO.getUserId());
@@ -110,5 +117,29 @@ public class ChatServiceImpl implements ChatService{
             throw new BadRequestException("Chat with this id does not exist!");
 
         return chatMapper.fromChatEntityToChatResponseDTO(chatEntity.get());
+    }
+
+    public PaginatedResponseDTO<ChatResponseDTO> getChats (int pageNo, int pageSize) {
+        Page<ChatEntity> chatEntityPage = chatRepository.findAll(PageRequest.of(pageNo - 1, pageSize));
+
+        List<ChatResponseDTO> chatsDTOs = chatEntityPage.getContent().stream()
+                .map(chat -> new ChatResponseDTO(
+                        chat.getId(),
+                        chat.getNameOfChat(),
+                        chat.getTypeOfChat(),
+                        chat.getMembers().stream()
+                                .map(user -> userMapper.toUserResponseDTO(user))
+                                .collect(Collectors.toSet())
+                ))
+                .collect(Collectors.toList());
+
+        PaginatedResponseDTO<ChatResponseDTO> chatPageDTO = new PaginatedResponseDTO<>();
+        chatPageDTO.setUsers(chatsDTOs);
+        chatPageDTO.setPageNumber(chatEntityPage.getNumber() + 1); // +1 to adjust for zero-based pages
+        chatPageDTO.setPageSize(chatEntityPage.getSize());
+        chatPageDTO.setTotalElements(chatEntityPage.getTotalElements());
+        chatPageDTO.setTotalPages(chatEntityPage.getTotalPages());
+
+        return chatPageDTO;
     }
 }
