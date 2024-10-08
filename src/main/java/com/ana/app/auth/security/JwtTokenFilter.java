@@ -1,6 +1,6 @@
 package com.ana.app.auth.security;
 
-import com.ana.app.user.Entities.UserEntity;
+import com.ana.app.user.entities.UserEntity;
 import com.ana.app.user.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,8 +1,8 @@
 package com.ana.app.auth;
 
-import com.ana.app.auth.DTOs.ForgotPasswordDTO;
-import com.ana.app.auth.DTOs.LoginDTO;
-import com.ana.app.auth.DTOs.ResetPasswordDTO;
+import com.ana.app.auth.dto.ForgotPasswordDTO;
+import com.ana.app.auth.dto.LoginDTO;
+import com.ana.app.auth.dto.ResetPasswordDTO;
 import com.ana.app.auth.security.JwtResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,6 +37,7 @@ public class AuthController {
     @PostMapping("/forgot-password")
     public String forgotPassword(@Valid @RequestBody ForgotPasswordDTO forgotPasswordDTO) {
         authService.sendForgotPasswordEmail(forgotPasswordDTO);
+        // TODO: Change response body from string to general JSON object with "message" field with ResponseEntity
         return "Password reset email sent!";
     }
 
@@ -48,6 +49,7 @@ public class AuthController {
     @PostMapping("/reset-password")
     public String resetPassword(@Valid @RequestBody ResetPasswordDTO resetPasswordDTO) {
         authService.resetPassword(resetPasswordDTO);
+        // TODO: Change response body from string to general JSON object with "message" field with ResponseEntity
         return "Password reset sent successfully!";
     }
 }

@@ -1,10 +1,10 @@
 package com.ana.app.user;
 
-import com.ana.app.common.DTOs.PaginatedResponseDTO;
+import com.ana.app.common.dto.PaginatedResponseDTO;
 import com.ana.app.auth.exceptions.BadRequestException;
-import com.ana.app.user.DTOs.*;
-import com.ana.app.user.Entities.UserEntity;
-import com.ana.app.user.Mappers.UserMapper;
+import com.ana.app.user.dto.*;
+import com.ana.app.user.entities.UserEntity;
+import com.ana.app.user.mappers.UserMapper;
 import io.jsonwebtoken.lang.Strings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +51,14 @@ public class UserServiceImpl implements UserService{
         userEntity.setEmail(userDto.getEmail());
 
         userRepository.save(userEntity);
-        return userMapper.toUserResponseDTO(userEntity);
+        return userMapper.fromUserEntityToUserResponseDTO(userEntity);
     }
 
     @Override
     public UserResponseDTO getMe() {
         UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         var userEntity = userRepository.findByEmail(userDetails.getUsername());
-        return userMapper.toUserResponseDTO(userEntity);
+        return userMapper.fromUserEntityToUserResponseDTO(userEntity);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService{
         UserEntity userEntity = userMapper.fromCreateUserDTOtoUserEntity(userDTO);
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(userEntity);
-        return userMapper.toUserResponseDTO(userEntity);
+        return userMapper.fromUserEntityToUserResponseDTO(userEntity);
     }
 
     @Override
@@ -94,11 +94,11 @@ public class UserServiceImpl implements UserService{
     public UserResponseDTO editCurrentUser(UpdateUserDTO user){
         UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername());
-        userEntity.setName(user.getName());
-        userEntity.setLastName(user.getLastName());
-        userEntity.setEmail(user.getEmail());
-        userRepository.save(userEntity);
-        return userMapper.toUserResponseDTO(userEntity);
+//        userEntity.setName(user.getName());
+//        userEntity.setLastName(user.getLastName());
+//        userEntity.setEmail(user.getEmail());
+        userRepository.save(userMapper.fromUpdateUserDTOtoUserEntity(user));
+        return userMapper.fromUserEntityToUserResponseDTO(userEntity);
     }
 
     @Cacheable(value = "users", key = "#userId")
@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService{
         }
 
         var userEntity = userEntityOptional.get();
-        return userMapper.toUserResponseDTO(userEntity);
+        return userMapper.fromUserEntityToUserResponseDTO(userEntity);
     }
 
     @Cacheable(value = "usersPageCache", key = "'usersPage:' + #pageNo + ':' + #pageSize")

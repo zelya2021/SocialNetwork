@@ -1,9 +1,8 @@
 package com.ana.app.friendship;
 
-import com.ana.app.friendship.DTOs.CreateFriendshipRequestDTO;
-import com.ana.app.friendship.DTOs.FriendshipResponseDTO;
-import com.ana.app.friendship.DTOs.IncomingFriendshipRequestDTO;
-import com.ana.app.user.DTOs.UserResponseDTO;
+import com.ana.app.friendship.dto.CreateFriendshipRequestDTO;
+import com.ana.app.friendship.dto.FriendshipResponseDTO;
+import com.ana.app.user.dto.UserResponseDTO;
 
 import java.util.List;
 

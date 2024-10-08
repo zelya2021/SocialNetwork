@@ -8,12 +8,11 @@ import software.amazon.awssdk.services.ses.model.*;
 public class SESV2EmailSender {
     Region region = Region.US_WEST_2;
     SesClient ses = SesClient.builder().region(region).build();
-    private final AppConfig appConfig;
+    private final EmailConfig appConfig;
     String recipientEmail;
     Integer resetPasswordCode;
 
-
-    public SESV2EmailSender(AppConfig appConfig){
+    public SESV2EmailSender(EmailConfig appConfig){
         this.appConfig = appConfig;
     }
 

@@ -1,8 +1,8 @@
 package com.ana.app.auth;
 
-import com.ana.app.auth.DTOs.ForgotPasswordDTO;
-import com.ana.app.auth.DTOs.LoginDTO;
-import com.ana.app.auth.DTOs.ResetPasswordDTO;
+import com.ana.app.auth.dto.ForgotPasswordDTO;
+import com.ana.app.auth.dto.LoginDTO;
+import com.ana.app.auth.dto.ResetPasswordDTO;
 import com.ana.app.auth.security.JwtResponse;
 
 public interface AuthService {

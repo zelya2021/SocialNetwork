@@ -1,8 +1,8 @@
 package com.ana.app.friendship;
 
-import com.ana.app.friendship.DTOs.CreateFriendshipRequestDTO;
-import com.ana.app.friendship.DTOs.FriendshipResponseDTO;
-import com.ana.app.user.DTOs.UserResponseDTO;
+import com.ana.app.friendship.dto.CreateFriendshipRequestDTO;
+import com.ana.app.friendship.dto.FriendshipResponseDTO;
+import com.ana.app.user.dto.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

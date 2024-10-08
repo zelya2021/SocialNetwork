@@ -1,6 +1,6 @@
 package com.ana.app;
 
-import com.ana.app.user.DTOs.CreateUserDTO;
+import com.ana.app.user.dto.CreateUserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;

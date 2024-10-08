@@ -1,13 +1,13 @@
 package com.ana.app.auth;
 
 import com.ana.app.common.SESV2EmailSender;
-import com.ana.app.auth.DTOs.ForgotPasswordDTO;
-import com.ana.app.auth.DTOs.LoginDTO;
-import com.ana.app.auth.DTOs.ResetPasswordDTO;
+import com.ana.app.auth.dto.ForgotPasswordDTO;
+import com.ana.app.auth.dto.LoginDTO;
+import com.ana.app.auth.dto.ResetPasswordDTO;
 import com.ana.app.auth.exceptions.BadRequestException;
 import com.ana.app.auth.security.JwtResponse;
 import com.ana.app.auth.security.JwtUtil;
-import com.ana.app.user.Entities.UserEntity;
+import com.ana.app.user.entities.UserEntity;
 import com.ana.app.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +32,7 @@ public class AuthServiceImpl implements AuthService {
         UserEntity userEntity = userRepository.findByEmail(loginDTO.getEmail());
         System.out.println("user entity" + userEntity);
         if (userEntity == null) {
+            // TODO: Configure spring-boot logger and use logger with info / error / warn log calls instead of System.out.println
             System.out.println("User not found!");
             throw new BadRequestException("User not found!");
         }
@@ -48,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
     public void sendForgotPasswordEmail(ForgotPasswordDTO forgotPasswordDTO) {
         appService.setRecipientEmail(forgotPasswordDTO.getEmail());
         Random random = new Random();
+        // TODO: Extract reset password code generation in dedicated function to simplify future changes
         int resetPasswordCode = 10000 + random.nextInt(90000);
         appService.setResetPasswordCode(resetPasswordCode);
 

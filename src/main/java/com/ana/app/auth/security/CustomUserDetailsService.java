@@ -1,6 +1,6 @@
 package com.ana.app.auth.security;
 
-import com.ana.app.user.Entities.UserEntity;
+import com.ana.app.user.entities.UserEntity;
 import com.ana.app.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

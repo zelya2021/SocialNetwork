@@ -1,7 +1,7 @@
 package com.ana.app.user;
 
-import com.ana.app.common.DTOs.PaginatedResponseDTO;
-import com.ana.app.user.DTOs.*;
+import com.ana.app.common.dto.PaginatedResponseDTO;
+import com.ana.app.user.dto.*;
 
 public interface UserService {
 

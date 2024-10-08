@@ -1,9 +1,14 @@
 package com.ana.app.local;
 
+import com.ana.app.chat.directChat.DirectChatRepository;
+import com.ana.app.chat.directChat.entities.DirectChatEntity;
+import com.ana.app.chat.enums.TypeOfChat;
+import com.ana.app.chat.groupChat.GroupChatRepository;
+import com.ana.app.chat.groupChat.entities.GroupChatEntity;
 import com.ana.app.friendship.FriendshipRequestRepository;
 import com.ana.app.friendship.entities.FriendshipRequestEntity;
 import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
-import com.ana.app.user.Entities.UserEntity;
+import com.ana.app.user.entities.UserEntity;
 import com.ana.app.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,6 +27,10 @@ public class DataLoader {
 
     @Autowired
     private FriendshipRequestRepository friendRequestRepository;
+    @Autowired
+    private DirectChatRepository directChatRepository;
+    @Autowired
+    private GroupChatRepository groupChatRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -48,6 +57,21 @@ public class DataLoader {
 
             friendRequestRepository.save(friendRequest);
             friendRequestRepository.save(friendRequest1);
+
+            DirectChatEntity directChatEntity1 = new DirectChatEntity(1,TypeOfChat.DIRECT, user1, user2);
+            DirectChatEntity directChatEntity2 = new DirectChatEntity(2,TypeOfChat.DIRECT, user1, user3);
+            DirectChatEntity directChatEntity3 = new DirectChatEntity(3, TypeOfChat.DIRECT, user2, user3);
+            directChatRepository.save(directChatEntity1);
+            directChatRepository.save(directChatEntity2);
+            directChatRepository.save(directChatEntity3);
+
+            Set<UserEntity> group_chat1 = new HashSet<>();
+            group_chat1.add(user1);
+            group_chat1.add(user2);
+            group_chat1.add(user3);
+
+            GroupChatEntity groupChatEntity1 = new GroupChatEntity(1,"BFF", TypeOfChat.GROUP , group_chat1);
+            groupChatRepository.save(groupChatEntity1);
         };
     }
 }

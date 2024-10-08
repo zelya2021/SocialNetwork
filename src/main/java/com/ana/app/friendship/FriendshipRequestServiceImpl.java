@@ -1,14 +1,14 @@
 package com.ana.app.friendship;
 
-import com.ana.app.friendship.DTOs.CreateFriendshipRequestDTO;
-import com.ana.app.friendship.DTOs.FriendshipResponseDTO;
+import com.ana.app.friendship.dto.CreateFriendshipRequestDTO;
+import com.ana.app.friendship.dto.FriendshipResponseDTO;
 import com.ana.app.friendship.entities.FriendshipRequestEntity;
 import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
 import com.ana.app.auth.exceptions.BadRequestException;
-import com.ana.app.mapper.FriendshipMapper;
-import com.ana.app.user.DTOs.UserResponseDTO;
-import com.ana.app.user.Entities.UserEntity;
-import com.ana.app.user.Mappers.UserMapper;
+import com.ana.app.friendship.mapper.FriendshipMapper;
+import com.ana.app.user.dto.UserResponseDTO;
+import com.ana.app.user.entities.UserEntity;
+import com.ana.app.user.mappers.UserMapper;
 import com.ana.app.user.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +110,7 @@ public class FriendshipRequestServiceImpl implements FriendshipRequestService {
 
         return userEntity.getFriends()
                 .stream()
-                .map(userMapper::toUserResponseDTO)
+                .map(userMapper::fromUserEntityToUserResponseDTO)
                 .collect(Collectors.toList());
     }
 }

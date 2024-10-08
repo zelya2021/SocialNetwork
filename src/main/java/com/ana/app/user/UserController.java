@@ -1,8 +1,8 @@
 package com.ana.app.user;
 
-import com.ana.app.common.DTOs.PaginatedResponseDTO;
-import com.ana.app.common.DTOs.StatusDTO;
-import com.ana.app.user.DTOs.*;
+import com.ana.app.common.dto.PaginatedResponseDTO;
+import com.ana.app.common.dto.StatusDTO;
+import com.ana.app.user.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -70,7 +70,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
             @ApiResponse(responseCode = "400", description = "User with provided id does not exist!") })
     @PutMapping("/{id}")
-    public UserResponseDTO updateUser(@RequestBody UpdateUserDTO user, @PathVariable("id") Long id)
+    public UserResponseDTO updateUser(@Valid @RequestBody UpdateUserDTO user, @PathVariable("id") Long id)
     {
         return userService.updateUser(user, id);
     }
@@ -92,7 +92,7 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
             @ApiResponse(responseCode = "400", description = "Invalid old user's password") })
     @PutMapping("/change-password")
-    public StatusDTO changeUserPassword(@RequestBody ChangeUserPasswordDTO user)
+    public StatusDTO changeUserPassword(@Valid @RequestBody ChangeUserPasswordDTO user)
     {
         userService.changeUserPassword(user);
         return new StatusDTO("Password changed Successfully!");
