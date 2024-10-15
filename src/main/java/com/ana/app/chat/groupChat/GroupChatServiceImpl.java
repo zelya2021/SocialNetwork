@@ -6,7 +6,7 @@ import com.ana.app.chat.enums.TypeOfChat;
 import com.ana.app.chat.groupChat.dto.CreateGroupChatDTO;
 import com.ana.app.chat.groupChat.dto.GroupChatResponseDto;
 import com.ana.app.chat.groupChat.entities.GroupChatEntity;
-import com.ana.app.chat.mappers.ChatMapper;
+import com.ana.app.chat.groupChat.mappers.GroupChatMapper;
 import com.ana.app.common.dto.PaginatedResponseDTO;
 import com.ana.app.user.UserRepository;
 import com.ana.app.user.mappers.UserMapper;
@@ -27,7 +27,7 @@ public class GroupChatServiceImpl implements GroupChatService{
     @Autowired
     private UserRepository userRepository;
 
-    private static final ChatMapper chatMapper = Mappers.getMapper(ChatMapper.class);
+    private static final GroupChatMapper chatMapper = Mappers.getMapper(GroupChatMapper.class);
     private static final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     public GroupChatResponseDto createGroupChat(CreateGroupChatDTO groupChatDTO) {

@@ -2,6 +2,7 @@ package com.ana.app.user.entities;
 
 import com.ana.app.chat.directChat.entities.DirectChatEntity;
 import com.ana.app.chat.groupChat.entities.GroupChatEntity;
+import com.ana.app.messages.entities.MessageEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,9 @@ public class UserEntity {
 
     @ManyToMany
     private Set<GroupChatEntity> groupChats = new HashSet<>();
+
+    @OneToMany
+    private Set<MessageEntity> messages = new HashSet<>();
 
     public UserEntity(long id, String name, String lastName, String email, String password){
         this.id = id;

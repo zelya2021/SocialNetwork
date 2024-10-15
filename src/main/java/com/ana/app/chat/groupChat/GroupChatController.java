@@ -22,7 +22,7 @@ public class GroupChatController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
-            @ApiResponse(responseCode = "400", description = "User/users with provided ids does not found!")})
+            @ApiResponse(responseCode = "400", description = "Direct chat with this id does not exist!")})
     @PostMapping()
     public GroupChatResponseDto createGroupChat(@RequestBody CreateGroupChatDTO groupChatDTO)
     {

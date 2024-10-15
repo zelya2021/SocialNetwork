@@ -5,8 +5,8 @@ import com.ana.app.chat.DeleteChatDTO;
 import com.ana.app.chat.directChat.dto.CreateDirectChatDTO;
 import com.ana.app.chat.directChat.dto.DirectChatResponseDto;
 import com.ana.app.chat.directChat.entities.DirectChatEntity;
+import com.ana.app.chat.directChat.mappers.DirectChatMapper;
 import com.ana.app.chat.enums.TypeOfChat;
-import com.ana.app.chat.mappers.ChatMapper;
 import com.ana.app.common.dto.PaginatedResponseDTO;
 import com.ana.app.user.UserRepository;
 import com.ana.app.user.entities.UserEntity;
@@ -30,7 +30,7 @@ public class DirectChatServiceImpl implements DirectChatService{
     @Autowired
     private UserRepository userRepository;
 
-    private static final ChatMapper chatMapper = Mappers.getMapper(ChatMapper.class);
+    private static final DirectChatMapper chatMapper = Mappers.getMapper(DirectChatMapper.class);
     private static final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     public DirectChatResponseDto createDirectChat(CreateDirectChatDTO directChatDTO) {

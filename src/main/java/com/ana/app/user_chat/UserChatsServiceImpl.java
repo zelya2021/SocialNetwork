@@ -3,10 +3,11 @@ package com.ana.app.user_chat;
 import com.ana.app.chat.directChat.DirectChatRepository;
 import com.ana.app.chat.directChat.dto.DirectChatResponseDto;
 import com.ana.app.chat.directChat.entities.DirectChatEntity;
+import com.ana.app.chat.directChat.mappers.DirectChatMapper;
 import com.ana.app.chat.groupChat.GroupChatRepository;
 import com.ana.app.chat.groupChat.dto.GroupChatResponseDto;
 import com.ana.app.chat.groupChat.entities.GroupChatEntity;
-import com.ana.app.chat.mappers.ChatMapper;
+import com.ana.app.chat.groupChat.mappers.GroupChatMapper;
 import com.ana.app.common.dto.PaginatedResponseDTO;
 import com.ana.app.user.UserRepository;
 import com.ana.app.user.entities.UserEntity;
@@ -31,7 +32,8 @@ public class UserChatsServiceImpl implements UserChatsService{
     private DirectChatRepository directChatRepository;
     @Autowired
     private GroupChatRepository groupChatRepository;
-    private static final ChatMapper chatMapper = Mappers.getMapper(ChatMapper.class);
+    private static final DirectChatMapper directChatMapper = Mappers.getMapper(DirectChatMapper.class);
+    private static final GroupChatMapper groupChatMapper = Mappers.getMapper(GroupChatMapper.class);
 
 
     public PaginatedResponseDTO<ListOfChatsResponseDto> getlistOfChatsForCurrentUser(int pageNo, int pageSize){
@@ -42,11 +44,11 @@ public class UserChatsServiceImpl implements UserChatsService{
         Page<GroupChatEntity> groupChatPage = groupChatRepository.findAllByMembers(PageRequest.of(pageNo - 1, pageSize), currentUserEntity);
 
         Set<DirectChatResponseDto> directChatDtos = directChatPage.getContent().stream()
-                .map(chatMapper::fromDirectChatEntityToDirectChatResponseDTO)
+                .map(directChatMapper::fromDirectChatEntityToDirectChatResponseDTO)
                 .collect(Collectors.toSet());
 
         Set<GroupChatResponseDto> groupChatDtos = groupChatPage.getContent().stream()
-                .map(chatMapper::fromGroupChatEntityToGroupChatResponseDto)
+                .map(groupChatMapper::fromGroupChatEntityToGroupChatResponseDto)
                 .collect(Collectors.toSet());
 
         ListOfChatsResponseDto responseDto = new ListOfChatsResponseDto();

@@ -8,6 +8,8 @@ import com.ana.app.chat.groupChat.entities.GroupChatEntity;
 import com.ana.app.friendship.FriendshipRequestRepository;
 import com.ana.app.friendship.entities.FriendshipRequestEntity;
 import com.ana.app.friendship.enums.StatusOfFriendshipRequestEnum;
+import com.ana.app.messages.MessageRepository;
+import com.ana.app.messages.entities.MessageEntity;
 import com.ana.app.user.entities.UserEntity;
 import com.ana.app.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +34,8 @@ public class DataLoader {
     private DirectChatRepository directChatRepository;
     @Autowired
     private GroupChatRepository groupChatRepository;
+    @Autowired
+    private MessageRepository messageRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -58,9 +63,14 @@ public class DataLoader {
             friendRequestRepository.save(friendRequest);
             friendRequestRepository.save(friendRequest1);
 
-            DirectChatEntity directChatEntity1 = new DirectChatEntity(1,TypeOfChat.DIRECT, user1, user2);
-            DirectChatEntity directChatEntity2 = new DirectChatEntity(2,TypeOfChat.DIRECT, user1, user3);
-            DirectChatEntity directChatEntity3 = new DirectChatEntity(3, TypeOfChat.DIRECT, user2, user3);
+            Set<MessageEntity> messageEntity = new HashSet<>();
+            MessageEntity message1 = new MessageEntity(1, LocalDateTime.now(), "Hi", user2, null, null);
+            messageEntity.add(message1);
+            messageRepository.save(message1);
+
+            DirectChatEntity directChatEntity1 = new DirectChatEntity(1,TypeOfChat.DIRECT, user1, user2, messageEntity);
+            DirectChatEntity directChatEntity2 = new DirectChatEntity(2,TypeOfChat.DIRECT, user1, user3, null);
+            DirectChatEntity directChatEntity3 = new DirectChatEntity(3, TypeOfChat.DIRECT, user2, user3, null);
             directChatRepository.save(directChatEntity1);
             directChatRepository.save(directChatEntity2);
             directChatRepository.save(directChatEntity3);
@@ -70,7 +80,11 @@ public class DataLoader {
             group_chat1.add(user2);
             group_chat1.add(user3);
 
-            GroupChatEntity groupChatEntity1 = new GroupChatEntity(1,"BFF", TypeOfChat.GROUP , group_chat1);
+            Set<MessageEntity> messageEntity1 = new HashSet<>();
+            MessageEntity message2 = new MessageEntity(2, LocalDateTime.now(), "Hi", user1, null, null);
+            messageEntity.add(message2);
+            messageRepository.save(message2);
+            GroupChatEntity groupChatEntity1 = new GroupChatEntity(1,"BFF", TypeOfChat.GROUP , group_chat1, messageEntity1);
             groupChatRepository.save(groupChatEntity1);
         };
     }
