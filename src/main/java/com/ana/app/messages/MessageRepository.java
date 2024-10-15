@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MessageRepository
         extends JpaRepository<MessageEntity, Long> {
+    boolean existsByIdAndAuthorId(Long messageId, Long userId);
 }

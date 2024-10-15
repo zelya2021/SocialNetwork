@@ -8,6 +8,7 @@ import com.ana.app.chat.groupChat.GroupChatRepository;
 import com.ana.app.chat.groupChat.entities.GroupChatEntity;
 import com.ana.app.messages.dto.CreateMessageDTO;
 import com.ana.app.messages.dto.MessageResponseDTO;
+import com.ana.app.messages.dto.UpdateMessageDTO;
 import com.ana.app.messages.entities.MessageEntity;
 import com.ana.app.messages.mappers.MessageMapper;
 import com.ana.app.user.UserRepository;
@@ -62,11 +63,48 @@ public class MessagesServiceImpl implements MessagesService{
 
         messageRepository.save(messageEntity);
 
+          MessageResponseDTO responseDTO = new MessageResponseDTO();
+          responseDTO.setId(messageEntity.getId());
+          responseDTO.setMessage(messageEntity.getMessage());
+          responseDTO.setChatId(createMessageDTO.getChatId());
+          responseDTO.setTypeOfChat(createMessageDTO.getTypeOfChat());
+          responseDTO.setTime(messageEntity.getTime());
+          responseDTO.setAuthor(userMapper.fromUserEntityToUserResponseDTO(currentUserEntity));
+        return responseDTO;
+    }
+
+    public MessageResponseDTO updateMessage(UpdateMessageDTO updateMessageDTO, Long id){
+        UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity currentUserEntity = userRepository.findByEmail(userDetails.getUsername());
+        Optional<MessageEntity> optionalMessageEntity = messageRepository.findById(id);
+
+        if (optionalMessageEntity.isEmpty()){
+            throw new BadRequestException("Message with this id does not exist!");
+        }
+        var messageEntity = optionalMessageEntity.get();
+
+        if (updateMessageDTO.getTypeOfChat() == TypeOfChat.DIRECT){
+            Optional<DirectChatEntity> IsChatEntity = directChatRepository.findById(updateMessageDTO.getChatId());
+            if(IsChatEntity.isEmpty())
+                throw new BadRequestException("Direct chat with this id does not exist!");
+        }
+        else{
+            Optional<GroupChatEntity> IsChatEntity = groupChatRepository.findById(updateMessageDTO.getChatId());
+            if(IsChatEntity.isEmpty())
+                throw new BadRequestException("Group chat with this id does not exist!");
+        }
+
+        if (!messageRepository.existsByIdAndAuthorId(messageEntity.getId(), currentUserEntity.getId()))
+            throw new BadRequestException("Message doesn`t belong to the current user!!");
+
+        messageEntity.setMessage(updateMessageDTO.getMessage());
+        messageRepository.save(messageEntity);
+
         MessageResponseDTO responseDTO = new MessageResponseDTO();
         responseDTO.setId(messageEntity.getId());
         responseDTO.setMessage(messageEntity.getMessage());
-        responseDTO.setChatId(createMessageDTO.getChatId());
-        responseDTO.setTypeOfChat(createMessageDTO.getTypeOfChat());
+        responseDTO.setChatId(updateMessageDTO.getChatId());
+        responseDTO.setTypeOfChat(updateMessageDTO.getTypeOfChat());
         responseDTO.setTime(messageEntity.getTime());
         responseDTO.setAuthor(userMapper.fromUserEntityToUserResponseDTO(currentUserEntity));
         return responseDTO;
