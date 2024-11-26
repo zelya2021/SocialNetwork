@@ -6,7 +6,6 @@ import com.ana.app.messages.dto.MessageResponseDTO;
 import com.ana.app.messages.entities.MessageEntity;
 import com.ana.app.user.mappers.UserMapper;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(uses = {UserMapper.class, DirectChatMapper.class, GroupChatMapper.class})
 public interface MessageMapper {

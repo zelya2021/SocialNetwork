@@ -19,9 +19,9 @@ public interface DirectChatRepository extends JpaRepository<DirectChatEntity, Lo
     Optional<DirectChatEntity> findByUsers(@Param("user1") UserEntity user1, @Param("user2") UserEntity user2);
 
     // New method to find all direct chats involving the current user
-    @Query("SELECT d FROM DirectChatEntity d WHERE d.user1 = :user OR d.user2 = :user")
-    HashSet<DirectChatEntity> findAllByUser(@Param("user") UserEntity user);
 
     @Query("SELECT d FROM DirectChatEntity d WHERE d.user1 = :user OR d.user2 = :user")
     Page<DirectChatEntity> findAllByUser(Pageable pageable, @Param("user") UserEntity user);
+
+    Optional<DirectChatEntity> findById(Long id);
 }

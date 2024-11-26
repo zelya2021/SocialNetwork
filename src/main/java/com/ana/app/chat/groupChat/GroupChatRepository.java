@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
+import java.util.Optional;
 
 @Repository
 public interface GroupChatRepository extends JpaRepository<GroupChatEntity, Long> {
@@ -18,4 +19,6 @@ public interface GroupChatRepository extends JpaRepository<GroupChatEntity, Long
     HashSet<GroupChatEntity> findAllByMembers(@Param("user") UserEntity user);
 
     Page<GroupChatEntity> findAllByMembers(Pageable pageable, UserEntity user);
+
+    Optional<GroupChatEntity> findById(Long id);
 }
