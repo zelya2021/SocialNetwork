@@ -36,8 +36,8 @@ public class MessagesController {
             @ApiResponse(responseCode = "200", description = "Successful operation"),
             @ApiResponse(responseCode = "403", description = "Non authorized user"),
             @ApiResponse(responseCode = "400", description = "User/users with provided ids does not found!")})
-    @PostMapping("update/{id}")
-    public MessageResponseDTO updateGroupChat(@PathVariable("id") Long id, @RequestBody UpdateMessageDTO updateMessageDTO)
+    @PostMapping("/{id}")
+    public MessageResponseDTO updateMessage(@PathVariable("id") Long id, @RequestBody UpdateMessageDTO updateMessageDTO)
     {
         return messagesService.updateMessage(updateMessageDTO, id);
     }

@@ -80,37 +80,29 @@ public class MessagesServiceImpl implements MessagesService {
     public MessageResponseDTO updateMessage(UpdateMessageDTO updateMessageDTO, Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity currentUserEntity = userRepository.findByEmail(userDetails.getUsername());
-        Optional<MessageEntity> optionalMessageEntity = messageRepository.findById(id);
-
-        if (optionalMessageEntity.isEmpty()) {
-            throw new BadRequestException("Message with this id does not exist!");
-        }
-        var messageEntity = optionalMessageEntity.get();
-
-        if (updateMessageDTO.getTypeOfChat() == TypeOfChat.DIRECT) {
-            Optional<DirectChatEntity> IsChatEntity = directChatRepository.findById(updateMessageDTO.getChatId());
-            if (IsChatEntity.isEmpty())
-                throw new BadRequestException("Direct chat with this id does not exist!");
-        } else {
-            Optional<GroupChatEntity> IsChatEntity = groupChatRepository.findById(updateMessageDTO.getChatId());
-            if (IsChatEntity.isEmpty())
-                throw new BadRequestException("Group chat with this id does not exist!");
-        }
+        MessageEntity messageEntity = messageRepository.findById(id).
+                orElseThrow(() -> new BadRequestException("Message with this id does not exist!"));
 
         if (!messageRepository.existsByIdAndAuthorId(messageEntity.getId(), currentUserEntity.getId()))
             throw new BadRequestException("Message doesn`t belong to the current user!!");
 
-        messageEntity.setMessage(updateMessageDTO.getMessage());
+        if (updateMessageDTO.getTypeOfChat() == TypeOfChat.DIRECT) {
+            DirectChatEntity directChat = directChatRepository.findById(updateMessageDTO.getChatId())
+                    .orElseThrow(() -> new BadRequestException("Direct chat with this id does not exist!"));
+
+            messageEntity.setMessage(updateMessageDTO.getMessage());
+        } else {
+            GroupChatEntity groupChat = groupChatRepository.findById(updateMessageDTO.getChatId())
+                    .orElseThrow(() -> new BadRequestException("Group chat with this id does not exist!"));
+
+            messageEntity.setMessage(updateMessageDTO.getMessage());
+        }
         messageRepository.save(messageEntity);
 
-        MessageResponseDTO responseDTO = new MessageResponseDTO();
-        responseDTO.setId(messageEntity.getId());
-        responseDTO.setMessage(messageEntity.getMessage());
-        responseDTO.setChatId(updateMessageDTO.getChatId());
-        responseDTO.setTypeOfChat(updateMessageDTO.getTypeOfChat());
-        responseDTO.setTime(messageEntity.getTime());
-        responseDTO.setAuthor(userMapper.fromUserEntityToUserResponseDTO(currentUserEntity));
-        return responseDTO;
+        MessageResponseDTO dto =  messageMapper.fromMessageEntityToMessageResponseDTO(messageEntity);
+        dto.setChatId(updateMessageDTO.getChatId());
+        dto.setTypeOfChat(updateMessageDTO.getTypeOfChat());
+        return dto;
     }
 
     public List<MessageResponseDTO> getMessagesFromChat(Long chatId, String typeOfChat) {
