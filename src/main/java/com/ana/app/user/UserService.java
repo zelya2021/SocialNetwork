@@ -16,5 +16,5 @@ public interface UserService {
     void changeUserPassword(ChangeUserPasswordDTO user);
     UserResponseDTO editCurrentUser(UpdateUserDTO user);
     UserResponseDTO getUserById(Long userId);
-    PaginatedResponseDTO<UserResponseDTO> findPaginatedDTO(int pageNo, int pageSize);
+    PaginatedResponseDTO<UserResponseDTO> getAllUsers(int pageNo, int pageSize);
 }

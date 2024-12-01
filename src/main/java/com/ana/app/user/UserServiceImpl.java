@@ -94,10 +94,10 @@ public class UserServiceImpl implements UserService{
     public UserResponseDTO editCurrentUser(UpdateUserDTO user){
         UserDetails userDetails =  (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByEmail(userDetails.getUsername());
-//        userEntity.setName(user.getName());
-//        userEntity.setLastName(user.getLastName());
-//        userEntity.setEmail(user.getEmail());
-        userRepository.save(userMapper.fromUpdateUserDTOtoUserEntity(user));
+        userEntity.setName(user.getName());
+        userEntity.setLastName(user.getLastName());
+        userEntity.setEmail(user.getEmail());
+        userRepository.save(userEntity);
         return userMapper.fromUserEntityToUserResponseDTO(userEntity);
     }
 
@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Cacheable(value = "usersPageCache", key = "'usersPage:' + #pageNo + ':' + #pageSize")
-    public PaginatedResponseDTO<UserResponseDTO> findPaginatedDTO(int pageNo, int pageSize) {
+    public PaginatedResponseDTO<UserResponseDTO> getAllUsers(int pageNo, int pageSize) {
         Page<UserEntity> userPage = userRepository.findAll(PageRequest.of(pageNo - 1, pageSize));
         List<UserResponseDTO> userDTOs = userPage.getContent().stream()
                 .map(user -> new UserResponseDTO(user.getId(),user.getName(), user.getLastName(), user.getEmail()))

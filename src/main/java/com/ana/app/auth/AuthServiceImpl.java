@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("Incorrect password!");
         }
 
-        String token = JwtUtil.generateToken(loginDTO.getEmail());
+        String token = JwtUtil.generateToken(userEntity.getAuthId().toString());
         return new JwtResponse(token);
     }
 

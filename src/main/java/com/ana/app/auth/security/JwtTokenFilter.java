@@ -69,8 +69,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     private UserDetails getUserDetails(String token) {
-        String username = JwtUtil.getUsernameFromToken(token);
-        UserEntity user = userRepository.findByEmail(username);
+        String authId = JwtUtil.getAuthIdFromToken(token);
+        UserEntity user = userRepository.findByAuthId(authId);
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
     }
 

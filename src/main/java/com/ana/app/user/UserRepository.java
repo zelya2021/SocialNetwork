@@ -10,6 +10,7 @@ import java.util.Set;
 public interface UserRepository
         extends JpaRepository<UserEntity, Long> {
     UserEntity findByEmail(String email);
+    UserEntity findByAuthId(String email);
     UserEntity findByResetPasswordCode(int code);
     Set<UserEntity> findByIdIn (Set<Long> ids);
 }

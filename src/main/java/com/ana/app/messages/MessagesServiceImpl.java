@@ -7,7 +7,6 @@ import com.ana.app.chat.enums.TypeOfChat;
 import com.ana.app.chat.groupChat.GroupChatRepository;
 import com.ana.app.chat.groupChat.entities.GroupChatEntity;
 import com.ana.app.messages.dto.CreateMessageDTO;
-import com.ana.app.messages.dto.GetMessagesDTO;
 import com.ana.app.messages.dto.MessageResponseDTO;
 import com.ana.app.messages.dto.UpdateMessageDTO;
 import com.ana.app.messages.entities.MessageEntity;
@@ -21,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;

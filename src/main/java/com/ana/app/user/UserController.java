@@ -105,6 +105,7 @@ public class UserController {
     @GetMapping("/")
     public PaginatedResponseDTO<UserResponseDTO> getAllUsers(@RequestParam(defaultValue = "1") int page,
                                                              @RequestParam(defaultValue = "50") int limit) {
-        return userService.findPaginatedDTO(page, limit);
+        System.out.println("HEELELEOOO");
+        return userService.getAllUsers(page, limit);
     }
 }
