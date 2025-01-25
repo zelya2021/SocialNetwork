@@ -7,6 +7,7 @@ import com.ana.app.chat.enums.TypeOfChat;
 import com.ana.app.chat.groupChat.GroupChatRepository;
 import com.ana.app.chat.groupChat.entities.GroupChatEntity;
 import com.ana.app.messages.dto.CreateMessageDTO;
+import com.ana.app.messages.dto.DeleteMessageDTO;
 import com.ana.app.messages.dto.MessageResponseDTO;
 import com.ana.app.messages.dto.UpdateMessageDTO;
 import com.ana.app.messages.entities.MessageEntity;
@@ -41,7 +42,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     public MessageResponseDTO sendMessage(CreateMessageDTO createMessageDTO) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity currentUserEntity = userRepository.findByEmail(userDetails.getUsername());
+        UserEntity currentUserEntity = userRepository.findByAuthId(userDetails.getUsername());
 
         MessageEntity messageEntity = new MessageEntity();
         if (createMessageDTO.getTypeOfChat() == TypeOfChat.DIRECT) {
@@ -77,7 +78,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     public MessageResponseDTO updateMessage(UpdateMessageDTO updateMessageDTO, Long id) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity currentUserEntity = userRepository.findByEmail(userDetails.getUsername());
+        UserEntity currentUserEntity = userRepository.findByAuthId(userDetails.getUsername());
         MessageEntity messageEntity = messageRepository.findById(id).
                 orElseThrow(() -> new BadRequestException("Message with this id does not exist!"));
 
@@ -105,7 +106,7 @@ public class MessagesServiceImpl implements MessagesService {
 
     public List<MessageResponseDTO> getMessagesFromChat(Long chatId, String typeOfChat) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity currentUserEntity = userRepository.findByEmail(userDetails.getUsername());
+        UserEntity currentUserEntity = userRepository.findByAuthId(userDetails.getUsername());
 
         if(TypeOfChat.DIRECT.name().equals(typeOfChat)){
             DirectChatEntity directChat = directChatRepository.findById(chatId)
@@ -142,6 +143,15 @@ public class MessagesServiceImpl implements MessagesService {
                     .collect(Collectors.toList());
         }
         else throw new BadRequestException("typeOfChat should equal to DIRECT or GROUP");
+    }
+
+    public DeleteMessageDTO deleteMessage(Long id){
+        Optional<MessageEntity> isMessageEntity = messageRepository.findById(id);
+        if(isMessageEntity.isEmpty())
+            throw new BadRequestException("Message with this id does not exist!");
+        messageRepository.deleteById(id);
+
+        return new DeleteMessageDTO(id);
     }
 
     private boolean isUserParticipantInDirectChat(DirectChatEntity directChat, Long userId) {

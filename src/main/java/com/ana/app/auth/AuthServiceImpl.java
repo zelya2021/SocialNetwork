@@ -32,7 +32,6 @@ public class AuthServiceImpl implements AuthService {
         UserEntity userEntity = userRepository.findByEmail(loginDTO.getEmail());
         System.out.println("user entity" + userEntity);
         if (userEntity == null) {
-            // TODO: Configure spring-boot logger and use logger with info / error / warn log calls instead of System.out.println
             System.out.println("User not found!");
             throw new BadRequestException("User not found!");
         }
@@ -49,7 +48,6 @@ public class AuthServiceImpl implements AuthService {
     public void sendForgotPasswordEmail(ForgotPasswordDTO forgotPasswordDTO) {
         appService.setRecipientEmail(forgotPasswordDTO.getEmail());
         Random random = new Random();
-        // TODO: Extract reset password code generation in dedicated function to simplify future changes
         int resetPasswordCode = 10000 + random.nextInt(90000);
         appService.setResetPasswordCode(resetPasswordCode);
 

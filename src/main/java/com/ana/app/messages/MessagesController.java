@@ -1,6 +1,7 @@
 package com.ana.app.messages;
 
 import com.ana.app.messages.dto.CreateMessageDTO;
+import com.ana.app.messages.dto.DeleteMessageDTO;
 import com.ana.app.messages.dto.MessageResponseDTO;
 import com.ana.app.messages.dto.UpdateMessageDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,5 +54,16 @@ public class MessagesController {
                                                 @RequestParam(value = "typeOfChat", required = true) String typeOfChat)
     {
         return messagesService.getMessagesFromChat(chatId, typeOfChat);
+    }
+
+    @Operation(summary = "Delete message")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "403", description = "Non authorized user"),
+            @ApiResponse(responseCode = "400", description = "Message not found!")})
+    @DeleteMapping("{id}")
+    public DeleteMessageDTO deleteMessage(@PathVariable("id") Long id)
+    {
+        return messagesService.deleteMessage(id);
     }
 }

@@ -68,7 +68,7 @@ public class DataLoader {
             messageEntity.add(message1);
             messageRepository.save(message1);
 
-            DirectChatEntity directChatEntity1 = new DirectChatEntity(1,TypeOfChat.DIRECT, user1, user2, messageEntity);
+            DirectChatEntity directChatEntity1 = new DirectChatEntity(1,TypeOfChat.DIRECT, user1, user2, null);
             DirectChatEntity directChatEntity2 = new DirectChatEntity(2,TypeOfChat.DIRECT, user1, user3, null);
             DirectChatEntity directChatEntity3 = new DirectChatEntity(3, TypeOfChat.DIRECT, user2, user3, null);
             directChatRepository.save(directChatEntity1);
@@ -81,7 +81,7 @@ public class DataLoader {
             group_chat1.add(user3);
 
             Set<MessageEntity> messageEntity1 = new HashSet<>();
-            MessageEntity message2 = new MessageEntity(2, LocalDateTime.now(), "Hi", user1, null, null);
+            MessageEntity message2 = new MessageEntity(2, LocalDateTime.now(), "Hi", user1, directChatEntity1, null);
             messageEntity.add(message2);
             messageRepository.save(message2);
             GroupChatEntity groupChatEntity1 = new GroupChatEntity(1,"BFF", TypeOfChat.GROUP , group_chat1, messageEntity1);

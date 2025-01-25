@@ -1,5 +1,6 @@
 package com.ana.app.user;
 
+import com.ana.app.chat.groupChat.entities.GroupChatEntity;
 import com.ana.app.common.dto.PaginatedResponseDTO;
 import com.ana.app.auth.exceptions.BadRequestException;
 import com.ana.app.user.dto.*;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,6 +69,7 @@ public class UserServiceImpl implements UserService{
         if(existingUser != null)
             throw new BadRequestException("User already exist!");
         UserEntity userEntity = userMapper.fromCreateUserDTOtoUserEntity(userDTO);
+        userEntity.setAuthId(UUID.randomUUID().toString());
         userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(userEntity);
         return userMapper.fromUserEntityToUserResponseDTO(userEntity);
@@ -75,6 +78,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @CacheEvict(value = "users", key = "#userId")
     public void deleteUserById(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new BadRequestException("User with provided id does not exist!"));
         userRepository.deleteById(userId);
     }
 
@@ -113,7 +117,7 @@ public class UserServiceImpl implements UserService{
         return userMapper.fromUserEntityToUserResponseDTO(userEntity);
     }
 
-    @Cacheable(value = "usersPageCache", key = "'usersPage:' + #pageNo + ':' + #pageSize")
+   // @Cacheable(value = "usersPageCache", key = "'usersPage:' + #pageNo + ':' + #pageSize")
     public PaginatedResponseDTO<UserResponseDTO> getAllUsers(int pageNo, int pageSize) {
         Page<UserEntity> userPage = userRepository.findAll(PageRequest.of(pageNo - 1, pageSize));
         List<UserResponseDTO> userDTOs = userPage.getContent().stream()
